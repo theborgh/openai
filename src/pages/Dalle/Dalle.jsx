@@ -9,14 +9,22 @@ export default function Dalle() {
     // load saved URLs from localstorage
     const urls = window.localStorage.getItem("urls");
     if (urls) {
-      const storedResults = urls.split(",");
-      setResults(storedResults);
+      const storedObjects = urls.split(";");
+      setResults(
+        Array.from(storedObjects, (el) => ({
+          url: el.split("#")[0],
+          description: el.split("#")[1],
+        }))
+      );
     }
   }, []);
 
   useEffect(() => {
     // update localStorage to sync it with results
-    localStorage.setItem("urls", results.join(","));
+    localStorage.setItem(
+      "urls",
+      results.map((el) => `${el.url}#${el.description}`).join(";")
+    );
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -49,10 +57,15 @@ export default function Dalle() {
       console.error("An error occurred with the fetch: ", response.status);
     } else {
       const data = await response.json();
-      const newData = data.data.map((item) => item.url);
+      const newData = Array.from(data.data, (item) => ({
+        url: item,
+        description: prompt,
+      }));
+
+      console.log("newData: ", newData);
 
       setResults([...newData, ...results]);
-      localStorage.setItem("urls", results.join(","));
+      localStorage.setItem("urls", results.join("#"));
     }
   };
 
@@ -93,7 +106,11 @@ export default function Dalle() {
 
         <div className="flex flex-wrap mt-5 gap-2">
           {results.map((result) => (
-            <ResultCard key={result} resultUrl={result} />
+            <ResultCard
+              key={result.url}
+              resultUrl={result.url}
+              description={result.description}
+            />
           ))}
         </div>
       </div>
