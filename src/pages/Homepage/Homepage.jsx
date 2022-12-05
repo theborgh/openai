@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./Homepage.scss";
+import ModelCard from "../../components/ModelCard/ModelCard";
+import models from "../../modelData";
 
 export default function Homepage() {
   return (
@@ -9,23 +9,16 @@ export default function Homepage() {
 
       <div>
         <p>Which model would you like to try?</p>
-        <div className="flex">
-          <div className="model">
-            <Link to="/dalle" className="font-bold text-lg">
-              DALL-E
-            </Link>
-            <div className="description text-sm">
-              Create images from a text description in natural language
-            </div>
-          </div>
-          <div className="model">
-            <Link to="/davinci" className="font-bold text-lg">
-              Davinci
-            </Link>
-            <div className="description text-sm">
-              The most advanced text model, based on GPT3
-            </div>
-          </div>
+        <div className="flex p-4 place-content-center gap-4">
+          {models.map((model) => (
+            <ModelCard
+              key={model.name}
+              modelName={model.name}
+              modelDescription={model.description}
+              modelPath={model.modelPath}
+              imagePath={model.imagePath}
+            />
+          ))}
         </div>
       </div>
     </div>
