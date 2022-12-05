@@ -9,12 +9,16 @@ import "./index.scss";
 function App() {
   return (
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-      <Footer />
+      <div id="container">
+        <Header />
+        <div id="body">
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </Router>
   );
 }

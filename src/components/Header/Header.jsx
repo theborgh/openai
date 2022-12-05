@@ -4,7 +4,7 @@ import "./header.scss";
 
 export default function Header() {
   return (
-    <div className="flex bg-header-bg p-2 place-content-between">
+    <div id="header" className="flex bg-header-bg p-2 place-content-between">
       <div id="logo">
         <Link className="logo font-black" to={"/"}>
           <span className="text-logo1">OpenAI</span>
