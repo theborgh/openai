@@ -32,6 +32,10 @@ export default function Dalle() {
     generateImage();
   };
 
+  const handleDelete = (url) => {
+    setResults(results.filter((el) => el.url !== url));
+  };
+
   const generateImage = async () => {
     const params = {
       prompt,
@@ -110,6 +114,7 @@ export default function Dalle() {
               key={result.url}
               resultUrl={result.url}
               description={result.description}
+              handleDelete={handleDelete}
             />
           ))}
         </div>
