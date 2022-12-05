@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export default function ResultCard({ resultUrl }) {
   return (
     <div>
-      <img src={resultUrl} className="h-20" />
+      <a href={resultUrl} target="_blank">
+        <img src={resultUrl} className="h-64 hover:border-2" />
+      </a>
     </div>
   );
 }

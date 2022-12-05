@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ResultCard from "../../components/ResultCard/ResultCard";
 
 export default function Dalle() {
   const [prompt, setPrompt] = useState("");
   const [results, setResults] = useState([]);
 
+  useEffect(() => {
+    // load saved URLs from localstorage
+    const urls = window.localStorage.getItem("urls");
+    if (urls) {
+      const storedResults = urls.split(",");
+      setResults(storedResults);
+    }
+  }, []);
+
+  useEffect(() => {
+    // update localStorage to sync it with results
+    localStorage.setItem("urls", results.join(","));
+  }, [results]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
     generateImage();
   };
 
   const generateImage = async () => {
-    console.log("prompt: ", prompt);
-
     const params = {
       prompt,
       n: 1,
@@ -34,10 +45,15 @@ export default function Dalle() {
       requestOptions
     );
 
-    const image_url = response.data;
-    console.log("The url is: ", image_url);
+    if (!response.ok) {
+      console.error("An error occurred with the fetch: ", response.status);
+    } else {
+      const data = await response.json();
+      const newData = data.data.map((item) => item.url);
 
-    console.log("test log: generateImage");
+      setResults([...newData, ...results]);
+      localStorage.setItem("urls", results.join(","));
+    }
   };
 
   return (
@@ -61,7 +77,7 @@ export default function Dalle() {
             value={prompt}
           />
           <div
-            onClick={(e) => setPrompt("")}
+            onClick={() => setPrompt("")}
             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
           >
             Clear
@@ -75,7 +91,7 @@ export default function Dalle() {
           </button>
         </form>
 
-        <div className="flex mt-5">
+        <div className="flex flex-wrap mt-5 gap-2">
           {results.map((result) => (
             <ResultCard key={result} resultUrl={result} />
           ))}
