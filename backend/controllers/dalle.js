@@ -1,6 +1,19 @@
 const cloudinary = require("../cloudinaryConfig");
 const imageDocInDB = require("../models/dalle/images");
 
+const getImages = async (req, res) => {
+  console.log("getImages");
+
+  try {
+    const response = await imageDocInDB.find({}).select("url description");
+    // console.log("getimages response: ", response);
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(500).json(e);
+    console.log("error: ", e);
+  }
+};
+
 const processNewImages = async (req, res) => {
   console.log("processNewImages");
 
@@ -13,14 +26,13 @@ const processNewImages = async (req, res) => {
     });
 
     const data = await Promise.all(promises);
-    const response = data.map((item) => ({ url: item.url, id: item.asset_id }));
+    const response = data.map((item) => item.url);
 
     res.status(200).json(response);
 
-    // send image id, url, and description to mongo
+    // send url and description to mongo
     const dbData = response.map((item, i) => ({
-      id: item.id,
-      url: item.url,
+      url: item,
       description: req.body[i].description,
     }));
     storeNewImagesInDB(dbData);
@@ -35,10 +47,10 @@ const storeNewImagesInDB = async (data) => {
   try {
     await imageDocInDB.insertMany(data);
 
-    console.log("images stored in DB");
+    console.log(data.length, " images stored in DB");
   } catch (error) {
     console.log(error, error.message);
   }
 };
 
-module.exports = { processNewImages, storeNewImagesInDB };
+module.exports = { processNewImages, getImages };

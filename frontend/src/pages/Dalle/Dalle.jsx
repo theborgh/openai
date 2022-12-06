@@ -8,29 +8,35 @@ export default function Dalle() {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  useEffect(async () => {
     // load saved URLs from localstorage
-    const urls = window.localStorage.getItem("urls");
-    if (urls) {
-      const storedObjects = urls.split(";");
-      setResults(
-        Array.from(storedObjects, (el) => ({
-          url: el.split("#")[0],
-          description: el.split("#")[1],
-        }))
-      );
-    }
+    // const urls = window.localStorage.getItem("urls");
+    // if (urls) {
+    //   const storedObjects = urls.split(";");
+    //   setResults(
+    //     Array.from(storedObjects, (el) => ({
+    //       url: el.split("#")[0],
+    //       description: el.split("#")[1],
+    //     }))
+    //   );
+    // }
+    //
+    // load images from mongoDB
+    console.log("loading data from mongo");
+    const res = await loadDataFromMongo();
+    setResults(res);
   }, []);
 
   useEffect(() => {
     // update localStorage to sync it with results
-    localStorage.setItem(
-      "urls",
-      results.map((el) => `${el.url}#${el.description}`).join(";")
-    );
-
+    // localStorage.setItem(
+    //   "urls",
+    //   results.map((el) => `${el.url}#${el.description}`).join(";")
+    // );
     // TODO: remove! testing
-    postNewDataToBE(results);
+    // postNewDataToBE(results);
+
+    console.log("results is now: ", results);
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -79,7 +85,10 @@ export default function Dalle() {
       const newData = Array.from(data.data, (item) => ({
         url: item,
         description: prompt,
+        _id: "",
       }));
+
+      console.log("newData: ", newData);
 
       setResults([...newData, ...results]);
       localStorage.setItem("urls", results.join("#"));
@@ -102,6 +111,22 @@ export default function Dalle() {
     const data = await response.json();
 
     console.log("postNewData data: ", data);
+  };
+
+  const loadDataFromMongo = async () => {
+    const response = await fetch("http://localhost:3000/dalle/images", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+      mode: "cors",
+    });
+
+    const data = await response.json();
+
+    console.log("loadDataFromMongo: ", data);
+
+    return data;
   };
 
   return (
@@ -152,14 +177,16 @@ export default function Dalle() {
         </form>
 
         <div className="flex flex-wrap mt-5 gap-2">
-          {results.map((result) => (
-            <ResultCard
-              key={result.url}
-              resultUrl={result.url}
-              description={result.description}
-              handleDelete={handleDelete}
-            />
-          ))}
+          {results &&
+            results.length &&
+            results.map((result) => (
+              <ResultCard
+                key={result._id}
+                resultUrl={result.url}
+                description={result.description}
+                handleDelete={handleDelete}
+              />
+            ))}
         </div>
       </div>
     </>
