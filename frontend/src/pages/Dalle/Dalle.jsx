@@ -28,6 +28,9 @@ export default function Dalle() {
       "urls",
       results.map((el) => `${el.url}#${el.description}`).join(";")
     );
+
+    // TODO: remove! testing
+    postNewDataToBE(results);
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -80,7 +83,25 @@ export default function Dalle() {
 
       setResults([...newData, ...results]);
       localStorage.setItem("urls", results.join("#"));
+
+      postNewDataToBE(newData);
     }
+  };
+
+  // Post openAI URLs and descriptions to the BE so they can be stored on Cloudinary/MongoDB
+  const postNewDataToBE = async (newData) => {
+    const response = await fetch("http://localhost:3000/dalle/process", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(newData),
+    });
+
+    const data = await response.json();
+
+    console.log("postNewData data: ", data);
   };
 
   return (
