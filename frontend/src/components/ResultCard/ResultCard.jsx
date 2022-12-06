@@ -1,5 +1,5 @@
 import React from "react";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faFileArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./ResultCard.scss";
 
@@ -21,13 +21,29 @@ export default function ResultCard({ resultUrl, description, handleDelete }) {
           className="h-64 hover:border-2"
         />
       </a>
-      <div className="cardDescription -translate-y-48 w-64">{description}</div>
+      <div className="cardDescription -translate-y-44 w-64 text-sm text-color-primary">
+        {description}
+      </div>
       <button
-        className="cardTrashcan absolute -translate-y-60 translate-x-56"
+        className="cardIcon absolute -translate-y-60 translate-x-56"
         onClick={() => handleDelete(resultUrl)}
       >
-        <FontAwesomeIcon icon={faTrashCan} />
+        <FontAwesomeIcon
+          className="fa-lg text-color-primary"
+          icon={faTrashCan}
+        />
       </button>
+      <a
+        className="cardIcon absolute -translate-y-60 translate-x-4"
+        href={resultUrl}
+        // href="oisdjfi"
+        download
+      >
+        <FontAwesomeIcon
+          className="fa-lg text-color-primary"
+          icon={faFileArrowDown}
+        />
+      </a>
     </div>
   );
 }

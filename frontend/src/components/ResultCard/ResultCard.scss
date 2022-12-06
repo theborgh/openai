@@ -7,19 +7,19 @@
     opacity: 1;
   }
 
-  .cardTrashcan {
+  .cardIcon {
     opacity: 1;
   }
 }
 
-.cardTrashcan {
+.cardIcon {
   opacity: 0;
-  transition: 0.7s ease;
+  transition: 0.6s ease;
 }
 
 .cardDescription {
   position: absolute;
-  transition: 0.7s ease;
+  transition: 0.6s ease;
   opacity: 0;
   text-align: center;
 }
@@ -29,6 +29,6 @@
   display: block;
   width: 100%;
   height: auto;
-  transition: 0.7s ease;
+  transition: 0.6s ease;
   backface-visibility: hidden;
 }
