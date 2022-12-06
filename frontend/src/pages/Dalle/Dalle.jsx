@@ -15,6 +15,18 @@ export default function Dalle() {
     }
 
     fetchData();
+
+    // load saved URLs from localstorage
+    // const urls = window.localStorage.getItem("urls");
+    // if (urls) {
+    //   const storedObjects = urls.split(";");
+    //   setResults(
+    //     Array.from(storedObjects, (el) => ({
+    //       url: el.split("#")[0],
+    //       description: el.split("#")[1],
+    //     }))
+    //   );
+    // }
   }, []);
 
   useEffect(() => {
@@ -93,7 +105,7 @@ export default function Dalle() {
     const data = await response.json();
 
     console.log("postNewData data: ", data);
-    // TODO: use the data to
+    // TODO: use the data to update the thumbnails
   };
 
   const loadDataFromMongo = async () => {
