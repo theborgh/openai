@@ -80,9 +80,11 @@ export default function Dalle() {
 
   return (
     <>
-      <h1 className="text-center">DALL-E</h1>
+      <h1 className="text-center text-color-primary font-serif mt-4">
+        DALL&#x2022;E 2
+      </h1>
 
-      <div className="mt-6">
+      <div className="mt-3">
         <form
           className="flex place-content-center gap-2 mx-5"
           onSubmit={handleSubmit}
@@ -91,19 +93,19 @@ export default function Dalle() {
             onChange={(e) => setPrompt(e.target.value)}
             type="text"
             id="description"
-            className="w-full form-control block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            className="w-full form-control block px-3 py-1.5 text-base font-normal text-color-disabled bg-white bg-clip-padding border border-solid border-color-primary rounded m-0 focus:text-color-primary focus:bg-white focus:border-color-primary focus:outline-none"
             value={prompt}
             placeholder="Type a natural language description of the image you would like to see &ndash; the more descriptive, the better"
           />
           <div
             onClick={() => setPrompt("")}
-            className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent hover:cursor-pointer"
+            className="bg-transparent text-color-primary font-semibold py-2 px-4 border border-color-primary rounded hover:cursor-pointer"
           >
             Clear
           </div>
           <button
             role="submit"
-            className="bg-transparent text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:bg-blue-500 hover:border-transparent rounded disabled:text-indigo-200 disabled:border-indigo-200 disabled:hover:text-indigo-200 disabled:hover:bg-white"
+            className="bg-transparent text-color-primary font-semibold hover:text-white py-2 px-4 border border-color-primary hover:bg-color-primary hover:border-transparent rounded disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled disabled:hover:bg-white"
             disabled={
               isLoading || prompt.length < 10 || prompt.split(" ").length < 3
             }
@@ -111,7 +113,7 @@ export default function Dalle() {
             {isLoading ? (
               <span className="flex">
                 <FontAwesomeIcon
-                  className="animate-spin h-5 w-5 mr-3 text-indigo-200"
+                  className="animate-spin h-5 w-5 mr-3 text-color-disabled"
                   icon={faSpinner}
                 />
                 Loading...

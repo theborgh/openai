@@ -1,17 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
     <div
       id="footer"
-      className="flex flex-wrap bg-footer-bg place-content-center"
+      className="flex flex-wrap bg-color-primary place-content-center text-color-disabled"
     >
-      OpenAI Demo (
-      <Link to="https://github.com/theborgh/openai" className="font-bold">
+      OpenAI Demo &lt;
+      <a
+        href="https://github.com/theborgh/openai"
+        className="font-bold hover:text-color-secondary"
+      >
         Github
-      </Link>
-      )
+      </a>
+      &nbsp;/&gt;
     </div>
   );
 }

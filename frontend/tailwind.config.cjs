@@ -4,11 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "header-bg": "#8ecd8e",
-        "header-link": "",
-        "footer-bg": "#71c171",
-        logo1: "#47476b",
-        logo2: "#666699",
+        "color-primary": "#19004E",
+        "color-secondary": "#c4d6e9",
+        "color-disabled": "#99a9b8",
       },
     },
   },

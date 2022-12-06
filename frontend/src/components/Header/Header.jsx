@@ -4,18 +4,21 @@ import "./header.scss";
 
 export default function Header() {
   return (
-    <div id="header" className="flex bg-header-bg p-2 place-content-between">
+    <div
+      id="header"
+      className="flex bg-color-primary p-2 place-content-between"
+    >
       <div id="logo">
         <Link className="logo font-black" to={"/"}>
-          <span className="text-logo1">OpenAI</span>
-          <span className="text-logo2">Demo</span>
+          <span className="text-color-secondary">OpenAI</span>
+          <span className="text-color-disabled">Demo</span>
         </Link>
       </div>
       <div id="links" className="flex justify-end space-x-2">
-        <div className="navbarLink text-logo1">
+        <div className="navbarLink text-color-disabled hover:text-color-secondary">
           <Link to={"/about"}>About</Link>
         </div>
-        <div className="navbarLink">Sign In</div>
+        <div className="navbarLink text-color-secondary">Sign In</div>
       </div>
     </div>
   );
