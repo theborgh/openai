@@ -6,6 +6,15 @@
   .cardDescription {
     opacity: 1;
   }
+
+  .cardTrashcan {
+    opacity: 1;
+  }
+}
+
+.cardTrashcan {
+  opacity: 0;
+  transition: 0.7s ease;
 }
 
 .cardDescription {
