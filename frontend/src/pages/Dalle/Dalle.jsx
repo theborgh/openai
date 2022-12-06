@@ -40,6 +40,11 @@ export default function Dalle() {
   };
 
   const generateImage = async () => {
+    if (prompt.length < 10 || prompt.split(" ").length < 3) {
+      console.error("invalid prompt");
+      return;
+    }
+
     const params = {
       prompt,
       n: 1,
@@ -95,14 +100,15 @@ export default function Dalle() {
             id="description"
             className="w-full form-control block px-3 py-1.5 text-base font-normal text-color-disabled bg-white bg-clip-padding border border-solid border-color-primary rounded m-0 focus:text-color-primary focus:bg-white focus:border-color-primary focus:outline-none"
             value={prompt}
-            placeholder="Type a natural language description of the image you would like to see &ndash; the more descriptive, the better"
+            placeholder="Type a natural language description of the image you want to see &ndash; the more descriptive, the better"
           />
-          <div
+          <button
             onClick={() => setPrompt("")}
-            className="bg-transparent text-color-primary font-semibold py-2 px-4 border border-color-primary rounded hover:cursor-pointer"
+            className="bg-transparent text-color-primary font-semibold py-2 px-4 border border-color-primary rounded hover:cursor-pointer disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled"
+            disabled={!prompt.length}
           >
             Clear
-          </div>
+          </button>
           <button
             role="submit"
             className="bg-transparent text-color-primary font-semibold hover:text-white py-2 px-4 border border-color-primary hover:bg-color-primary hover:border-transparent rounded disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled disabled:hover:bg-white"
