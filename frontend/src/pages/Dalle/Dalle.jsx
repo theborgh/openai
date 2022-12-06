@@ -38,8 +38,21 @@ export default function Dalle() {
     generateImage();
   };
 
-  const handleDelete = (url) => {
+  const handleDelete = async (url) => {
+    const elementToDelete = results.find((el) => el.url === url);
     setResults(results.filter((el) => el.url !== url));
+
+    // delete image from DB (find by id)
+    const response = await fetch("http://localhost:3000/dalle/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(elementToDelete),
+    });
+
+    await response.json();
   };
 
   const generateImage = async () => {
