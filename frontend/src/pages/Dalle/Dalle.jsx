@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ResultCard from "../../components/ResultCard/ResultCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dalle() {
   const [prompt, setPrompt] = useState("");
   const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // load saved URLs from localstorage
@@ -52,10 +55,14 @@ export default function Dalle() {
       body: JSON.stringify(params),
     };
 
+    setIsLoading(true);
+
     const response = await fetch(
       "https://api.openai.com/v1/images/generations",
       requestOptions
     );
+
+    setIsLoading(false);
 
     if (!response.ok) {
       console.error("An error occurred with the fetch: ", response.status);
@@ -97,9 +104,21 @@ export default function Dalle() {
           <button
             role="submit"
             className="bg-transparent text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:bg-blue-500 hover:border-transparent rounded disabled:text-indigo-200 disabled:border-indigo-200 disabled:hover:text-indigo-200 disabled:hover:bg-white"
-            disabled={prompt.length < 10 || prompt.split(" ").length < 3}
+            disabled={
+              isLoading || prompt.length < 10 || prompt.split(" ").length < 3
+            }
           >
-            Submit
+            {isLoading ? (
+              <span className="flex">
+                <FontAwesomeIcon
+                  className="animate-spin h-5 w-5 mr-3 text-indigo-200"
+                  icon={faSpinner}
+                />
+                Loading...
+              </span>
+            ) : (
+              "Submit"
+            )}
           </button>
         </form>
 
