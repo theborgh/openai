@@ -8,35 +8,17 @@ export default function Dalle() {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(async () => {
-    // load saved URLs from localstorage
-    // const urls = window.localStorage.getItem("urls");
-    // if (urls) {
-    //   const storedObjects = urls.split(";");
-    //   setResults(
-    //     Array.from(storedObjects, (el) => ({
-    //       url: el.split("#")[0],
-    //       description: el.split("#")[1],
-    //     }))
-    //   );
-    // }
-    //
-    // load images from mongoDB
-    console.log("loading data from mongo");
-    const res = await loadDataFromMongo();
-    setResults(res);
+  useEffect(() => {
+    async function fetchData() {
+      const res = await loadDataFromMongo();
+      setResults(res);
+    }
+
+    fetchData();
   }, []);
 
   useEffect(() => {
-    // update localStorage to sync it with results
-    // localStorage.setItem(
-    //   "urls",
-    //   results.map((el) => `${el.url}#${el.description}`).join(";")
-    // );
-    // TODO: remove! testing
-    // postNewDataToBE(results);
-
-    console.log("results is now: ", results);
+    // console.log("results is now: ", results);
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -111,6 +93,7 @@ export default function Dalle() {
     const data = await response.json();
 
     console.log("postNewData data: ", data);
+    // TODO: use the data to
   };
 
   const loadDataFromMongo = async () => {
@@ -123,8 +106,6 @@ export default function Dalle() {
     });
 
     const data = await response.json();
-
-    console.log("loadDataFromMongo: ", data);
 
     return data;
   };
