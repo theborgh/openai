@@ -1,0 +1,25 @@
+.cardContainer:hover {
+  .cardImage {
+    opacity: 0.3;
+  }
+
+  .cardDescription {
+    opacity: 1;
+  }
+}
+
+.cardDescription {
+  position: absolute;
+  transition: 0.7s ease;
+  opacity: 0;
+  text-align: center;
+}
+
+.cardImage {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: 0.7s ease;
+  backface-visibility: hidden;
+}
