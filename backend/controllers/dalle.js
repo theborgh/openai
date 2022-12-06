@@ -1,18 +1,22 @@
 const cloudinary = require("../cloudinaryConfig");
 
 const processNewImages = async (req, res) => {
+  // Upload all the newly generated images to cloudinary
   if (req.body && req.body.length !== 0) {
-    console.log("req.body[0].url is", req.body[0]);
-
-    const result = await cloudinary.uploader.upload(req.body[0].url, {
-      folder: "dalle",
+    const promises = req.body.map((item, i) => {
+      return cloudinary.uploader.upload(req.body[i].url, {
+        folder: "dalle",
+      });
     });
 
-    console.log("uploaded, response: ", result);
-    req.body.forEach((el) => {});
-    res.status(200).json({ url: result.url, id: result.asset_id });
+    const data = await Promise.all(promises);
+    const response = data.map((item) => ({ url: item.url, id: item.asset_id }));
+
+    res.status(200).json(response);
+
+    // send image id, url, and description to mongo
   } else {
-    res.status(400).json("Some error occurred");
+    res.status(400).json("Some error occurred, request payload is invalid");
   }
 };
 
