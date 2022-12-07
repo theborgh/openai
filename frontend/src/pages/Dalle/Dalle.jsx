@@ -185,14 +185,14 @@ export default function Dalle() {
               Clear
             </button>
             <button
-              role="submit"
+              type="submit"
               className="bg-transparent text-color-primary font-semibold hover:text-white py-2 px-4 border border-color-primary hover:bg-color-primary hover:border-transparent rounded disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled disabled:hover:bg-white grow lg:grow-0"
               disabled={
                 isLoading || prompt.length < 10 || prompt.split(" ").length < 3
               }
             >
               {isLoading ? (
-                <span className="flex">
+                <span className="flex place-content-center">
                   <FontAwesomeIcon
                     className="animate-spin h-5 w-5 mr-3 text-color-disabled"
                     icon={faSpinner}

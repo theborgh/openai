@@ -15,7 +15,7 @@ const getImages = async (req, res) => {
 };
 
 const processNewImages = async (req, res) => {
-  console.log("= processNewImages =");
+  console.log("== processNewImages ==");
 
   // Upload all the newly generated images to cloudinary
   if (req.body && req.body.length !== 0) {
@@ -54,7 +54,7 @@ const storeNewImagesInDB = async (data) => {
   try {
     const dbResp = await imageDocInDB.insertMany(data);
 
-    console.log(data.length, " images stored in DB");
+    console.log(data.length, " image(s) stored in DB");
     return dbResp;
   } catch (error) {
     console.log(error, error.message);
@@ -63,7 +63,7 @@ const storeNewImagesInDB = async (data) => {
 
 // Delete image from db and cloudinary
 const deleteImage = async (req, res) => {
-  console.log("=== deleteImage ===");
+  console.log("== deleteImage ==");
 
   try {
     const dbResponse = await imageDocInDB.findByIdAndRemove(req.body._id);
