@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ResultCard from "../../components/ResultCard/ResultCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import "./Dalle.scss";
 
 export default function Dalle() {
   const [prompt, setPrompt] = useState("");
@@ -206,7 +207,7 @@ export default function Dalle() {
           </div>
         </form>
 
-        <div className="flex flex-wrap mt-5 gap-2 place-content-center">
+        <div className="grid cont mt-5 gap-2 place-content-center">
           {results &&
             results.length !== 0 &&
             results.map((result) => (
