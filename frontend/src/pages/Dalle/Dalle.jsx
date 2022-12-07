@@ -179,6 +179,7 @@ export default function Dalle() {
           />
           <div className="flex flex-row gap-2">
             <button
+              type="button"
               onClick={() => setPrompt("")}
               className="bg-transparent text-color-primary font-semibold py-2 px-4 border border-color-primary rounded hover:cursor-pointer disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled grow lg:grow-0"
               disabled={!prompt.length}
