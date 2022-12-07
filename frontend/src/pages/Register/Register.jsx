@@ -66,12 +66,14 @@ export default function SignUp() {
               <button className="signup-btn mt-6" type="submit">
                 Sign Up
               </button>
-              <p className="text-right mt-2">forgot password?</p>
+              {/* <p className="text-right mt-2">forgot password?</p> */}
             </div>
           </form>
         </div>
         <div className="form-image-background w-5/12 bg-students-bg relative  justify-center hidden md:flex">
-          <p className="text-5xl text-center mt-11">Start exploring openAI</p>
+          <p className="text-5xl text-center mt-11">
+            See what AI is capable of
+          </p>
 
           {/* <img src={stars} className="w-full h-full absolute z-55 top-0 " /> */}
         </div>

@@ -10,7 +10,7 @@ export default function Header() {
     >
       <div id="logo">
         <Link className="logo font-black" to={"/"}>
-          <span className="text-color-secondary">OpenAI</span>
+          <span className="text-color-secondary">AI</span>
           <span className="text-color-disabled">Demo</span>
         </Link>
       </div>

@@ -49,13 +49,13 @@ export default function LogIn() {
               <button className="signup-btn mt-6" type="submit">
                 Sign In
               </button>
-              <p className="text-right mt-2">forgot password?</p>
+              {/* <p className="text-right mt-2">forgot password?</p> */}
             </div>
           </form>
         </div>
         <div className="form-image-background w-5/12 bg-students-bg relative  justify-center hidden md:flex">
           <p className="text-5xl text-center mt-11">
-            Explore what OpenAI is capable of
+            See what AI is capable of
           </p>
         </div>
       </div>

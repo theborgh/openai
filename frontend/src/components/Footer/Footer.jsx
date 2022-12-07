@@ -6,14 +6,14 @@ export default function Footer() {
       id="footer"
       className="flex flex-wrap bg-color-primary place-content-center text-color-disabled"
     >
-      OpenAI Demo &lt;
+      AI Demo &lt;
       <a
         href="https://github.com/theborgh/openai"
         className="font-bold hover:text-color-secondary"
       >
         Github
       </a>{" "}
-      &nbsp;/&gt; is not affiliated with OpenAI
+      &nbsp;/&gt;
     </div>
   );
 }

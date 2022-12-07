@@ -204,7 +204,7 @@ export default function Dalle() {
           </button>
         </form>
 
-        <div className="flex flex-wrap mt-5 gap-2">
+        <div className="flex flex-wrap mt-5 gap-2 place-content-center">
           {results &&
             results.length !== 0 &&
             results.map((result) => (
