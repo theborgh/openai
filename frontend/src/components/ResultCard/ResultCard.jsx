@@ -5,12 +5,13 @@ import "./ResultCard.scss";
 
 export default function ResultCard({ resultUrl, description, handleDelete }) {
   const generateCloudinaryThumbnailUrl = (url) => {
-    if (!url.includes("cloudinary")) return url;
+    if (url && !url.includes("cloudinary")) return url;
 
     let res = url.split("/");
     res.splice(6, 0, "c_fill,g_auto,h_256");
+    res = res.join("/");
 
-    return res.join("/");
+    return res;
   };
 
   return (

@@ -11,7 +11,7 @@ export default function Dalle() {
   useEffect(() => {
     async function fetchData() {
       const res = await loadDataFromMongo();
-      setResults(res);
+      setResults(res.reverse());
     }
 
     fetchData();
@@ -40,8 +40,8 @@ export default function Dalle() {
       );
       // testing: post data in state to BE (mongo + cloudinary) at EVERY state update!
       postNewDataToBE(results);
+      console.log("results is: ", results);
     }
-    console.log("results is: ", results);
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -101,19 +101,26 @@ export default function Dalle() {
     } else {
       const data = await response.json();
       const newData = Array.from(data.data, (item) => ({
-        url: item,
+        url: item.url,
         description: prompt,
         _id: "",
       }));
 
-      console.log("newData: ", newData);
+      if (import.meta.env.VITE_VERBOSE === "true") {
+        console.log("newData: ", newData);
+      }
 
       setResults([...newData, ...results]);
-      localStorage.setItem("urls", results.join("#"));
+
+      if (import.meta.env.VITE_DEBUGGING === "true") {
+        localStorage.setItem("urls", results.join("#"));
+      }
 
       postNewDataToBE(newData);
     }
   };
+
+  const isCloudinaryUrl = (s) => s.includes("cloudinary");
 
   // Post openAI URLs and descriptions to the BE so they can be stored on Cloudinary/MongoDB
   const postNewDataToBE = async (newData) => {
@@ -128,8 +135,12 @@ export default function Dalle() {
 
     const data = await response.json();
 
-    console.log("postNewData data: ", data);
-    // TODO: use the new data to update the thumbnails. Need to return mongo IDs from the endpoint along with each url?
+    if (import.meta.env.VITE_VERBOSE === "true") {
+      console.log("postNewData data: ", data);
+    }
+
+    // Use the new data to update the thumbnails.
+    setResults([...data, ...results.filter((el) => isCloudinaryUrl(el.url))]);
   };
 
   const loadDataFromMongo = async () => {
@@ -195,6 +206,7 @@ export default function Dalle() {
 
         <div className="flex flex-wrap mt-5 gap-2">
           {results &&
+            results.length !== 0 &&
             results.map((result) => (
               <ResultCard
                 key={result.url}

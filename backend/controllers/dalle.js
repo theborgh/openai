@@ -36,10 +36,10 @@ const processNewImages = async (req, res) => {
     }));
 
     const dbResponse = await storeNewImagesInDB(dbData);
-    const r = data.map((item) => ({
+    const r = data.map((item, i) => ({
       url: item.url,
-      description: item.description,
-      _id: dbResponse._id,
+      description: req.body[i].description,
+      _id: dbResponse[i]._id,
     }));
 
     res.status(200).json(r);
