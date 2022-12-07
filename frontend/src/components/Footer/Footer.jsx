@@ -12,8 +12,8 @@ export default function Footer() {
         className="font-bold hover:text-color-secondary"
       >
         Github
-      </a>
-      &nbsp;/&gt;
+      </a>{" "}
+      &nbsp;/&gt; is not affiliated with OpenAI
     </div>
   );
 }

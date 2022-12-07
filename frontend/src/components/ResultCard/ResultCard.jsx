@@ -22,7 +22,7 @@ export default function ResultCard({ resultUrl, description, handleDelete }) {
           className="h-64 hover:border-2"
         />
       </a>
-      <div className="cardDescription -translate-y-44 w-64 text-sm text-color-primary">
+      <div className="cardDescription -translate-y-44 w-60 text-sm text-color-primary">
         {description}
       </div>
       <button

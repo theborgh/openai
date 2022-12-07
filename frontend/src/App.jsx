@@ -7,6 +7,8 @@ import Homepage from "./pages/Homepage/Homepage";
 import Dalle from "./pages/Dalle/Dalle";
 import Davinci from "./pages/Davinci/Davinci";
 import "./index.scss";
+import SignUp from "./pages/Register/Register";
+import LogIn from "./pages/LogIn/LogIn";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/dalle" element={<Dalle />} />
             <Route path="/davinci" element={<Davinci />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/login" element={<LogIn />} />
           </Routes>
         </div>
         <Footer />

@@ -18,7 +18,9 @@ export default function Header() {
         <div className="navbarLink text-color-disabled hover:text-color-secondary">
           <Link to={"/about"}>About</Link>
         </div>
-        <div className="navbarLink text-color-secondary">Sign In</div>
+        <div className="navbarLink text-color-secondary">
+          <Link to={"/login"}>Login</Link>
+        </div>
       </div>
     </div>
   );
