@@ -165,7 +165,7 @@ export default function Dalle() {
 
       <div className="mt-3 mb-6">
         <form
-          className="flex place-content-center gap-2 mx-5"
+          className="flex flex-col place-content-center gap-2 mx-5 lg:flex-row"
           onSubmit={handleSubmit}
         >
           <input
@@ -176,32 +176,34 @@ export default function Dalle() {
             value={prompt}
             placeholder="Type a natural language description of the image you want to see &ndash; the more descriptive, the better"
           />
-          <button
-            onClick={() => setPrompt("")}
-            className="bg-transparent text-color-primary font-semibold py-2 px-4 border border-color-primary rounded hover:cursor-pointer disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled"
-            disabled={!prompt.length}
-          >
-            Clear
-          </button>
-          <button
-            role="submit"
-            className="bg-transparent text-color-primary font-semibold hover:text-white py-2 px-4 border border-color-primary hover:bg-color-primary hover:border-transparent rounded disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled disabled:hover:bg-white"
-            disabled={
-              isLoading || prompt.length < 10 || prompt.split(" ").length < 3
-            }
-          >
-            {isLoading ? (
-              <span className="flex">
-                <FontAwesomeIcon
-                  className="animate-spin h-5 w-5 mr-3 text-color-disabled"
-                  icon={faSpinner}
-                />
-                Loading...
-              </span>
-            ) : (
-              "Submit"
-            )}
-          </button>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => setPrompt("")}
+              className="bg-transparent text-color-primary font-semibold py-2 px-4 border border-color-primary rounded hover:cursor-pointer disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled grow lg:grow-0"
+              disabled={!prompt.length}
+            >
+              Clear
+            </button>
+            <button
+              role="submit"
+              className="bg-transparent text-color-primary font-semibold hover:text-white py-2 px-4 border border-color-primary hover:bg-color-primary hover:border-transparent rounded disabled:text-color-disabled disabled:border-color-disabled disabled:hover:text-color-disabled disabled:hover:bg-white grow lg:grow-0"
+              disabled={
+                isLoading || prompt.length < 10 || prompt.split(" ").length < 3
+              }
+            >
+              {isLoading ? (
+                <span className="flex">
+                  <FontAwesomeIcon
+                    className="animate-spin h-5 w-5 mr-3 text-color-disabled"
+                    icon={faSpinner}
+                  />
+                  Loading...
+                </span>
+              ) : (
+                "Submit"
+              )}
+            </button>
+          </div>
         </form>
 
         <div className="flex flex-wrap mt-5 gap-2 place-content-center">
