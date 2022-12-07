@@ -16,7 +16,7 @@ export default function Dalle() {
 
     fetchData();
 
-    // load saved URLs from localstorage
+    // load saved URLs from localstorage into state
     // const urls = window.localStorage.getItem("urls");
     // if (urls) {
     //   const storedObjects = urls.split(";");
@@ -30,7 +30,13 @@ export default function Dalle() {
   }, []);
 
   useEffect(() => {
-    // console.log("results is now: ", results);
+    // update localStorage to sync it with state
+    // localStorage.setItem(
+    //   "urls",
+    //   results.map((el) => `${el.url}#${el.description}`).join(";")
+    // );
+    // TODO: remove! testing: post data in state to BE (mongo + cloudinary)
+    // postNewDataToBE(results);
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -141,7 +147,7 @@ export default function Dalle() {
         DALL&#x2022;E 2
       </h1>
 
-      <div className="mt-3">
+      <div className="mt-3 mb-6">
         <form
           className="flex place-content-center gap-2 mx-5"
           onSubmit={handleSubmit}

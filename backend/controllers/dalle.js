@@ -32,6 +32,7 @@ const processNewImages = async (req, res) => {
 
     // send url and description to mongo
     const dbData = response.map((item, i) => ({
+      cloudinaryId: data[i].public_id,
       url: item,
       description: req.body[i].description,
     }));
@@ -53,15 +54,16 @@ const storeNewImagesInDB = async (data) => {
   }
 };
 
+// Delete image from db and cloudinary
 const deleteImage = async (req, res) => {
   console.log("=== deleteImage ===");
 
-  console.log("id: ", req.body._id);
-
   try {
-    await imageDocInDB.findByIdAndRemove(req.body._id);
+    const dbResponse = await imageDocInDB.findByIdAndRemove(req.body._id);
 
     // TODO: delete from cloudinary!
+    const response = await cloudinary.uploader.destroy(dbResponse.cloudinaryId);
+    console.log("+ cloudinary deletion: ", response.result);
 
     res.status(200).json("ok");
   } catch (e) {
