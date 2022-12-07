@@ -40,8 +40,8 @@ export default function Dalle() {
       );
       // testing: post data in state to BE (mongo + cloudinary) at EVERY state update!
       postNewDataToBE(results);
-      console.log("results is: ", results);
     }
+    console.log("results is: ", results);
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -129,7 +129,7 @@ export default function Dalle() {
     const data = await response.json();
 
     console.log("postNewData data: ", data);
-    // TODO: use the new data to update the thumbnails
+    // TODO: use the new data to update the thumbnails. Need to return mongo IDs from the endpoint along with each url?
   };
 
   const loadDataFromMongo = async () => {
@@ -197,7 +197,7 @@ export default function Dalle() {
           {results &&
             results.map((result) => (
               <ResultCard
-                key={result._id}
+                key={result.url}
                 resultUrl={result.url}
                 description={result.description}
                 handleDelete={handleDelete}

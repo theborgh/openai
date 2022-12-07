@@ -28,15 +28,21 @@ const processNewImages = async (req, res) => {
     const data = await Promise.all(promises);
     const response = data.map((item) => item.url);
 
-    res.status(200).json(response);
-
     // send url and description to mongo
     const dbData = response.map((item, i) => ({
       cloudinaryId: data[i].public_id,
       url: item,
       description: req.body[i].description,
     }));
-    storeNewImagesInDB(dbData);
+
+    const dbResponse = await storeNewImagesInDB(dbData);
+    const r = data.map((item) => ({
+      url: item.url,
+      description: item.description,
+      _id: dbResponse._id,
+    }));
+
+    res.status(200).json(r);
   } else {
     res.status(400).json("Some error occurred, request payload is invalid");
   }
@@ -46,9 +52,10 @@ const storeNewImagesInDB = async (data) => {
   console.log("== storeNewImagesInDB ==");
 
   try {
-    await imageDocInDB.insertMany(data);
+    const dbResp = await imageDocInDB.insertMany(data);
 
     console.log(data.length, " images stored in DB");
+    return dbResp;
   } catch (error) {
     console.log(error, error.message);
   }
