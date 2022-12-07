@@ -16,27 +16,32 @@ export default function Dalle() {
 
     fetchData();
 
-    // load saved URLs from localstorage into state
-    // const urls = window.localStorage.getItem("urls");
-    // if (urls) {
-    //   const storedObjects = urls.split(";");
-    //   setResults(
-    //     Array.from(storedObjects, (el) => ({
-    //       url: el.split("#")[0],
-    //       description: el.split("#")[1],
-    //     }))
-    //   );
-    // }
+    if (import.meta.env.VITE_DEBUGGING === "true") {
+      // load saved URLs from localstorage into state
+      const urls = window.localStorage.getItem("urls");
+      if (urls) {
+        const storedObjects = urls.split(";");
+        setResults(
+          Array.from(storedObjects, (el) => ({
+            url: el.split("#")[0],
+            description: el.split("#")[1],
+          }))
+        );
+      }
+    }
   }, []);
 
   useEffect(() => {
-    // update localStorage to sync it with state
-    // localStorage.setItem(
-    //   "urls",
-    //   results.map((el) => `${el.url}#${el.description}`).join(";")
-    // );
-    // TODO: remove! testing: post data in state to BE (mongo + cloudinary)
-    // postNewDataToBE(results);
+    if (import.meta.env.VITE_DEBUGGING === "true") {
+      // update localStorage to sync it with state
+      localStorage.setItem(
+        "urls",
+        results.map((el) => `${el.url}#${el.description}`).join(";")
+      );
+      // testing: post data in state to BE (mongo + cloudinary) at EVERY state update!
+      postNewDataToBE(results);
+      console.log("results is: ", results);
+    }
   }, [results]);
 
   const handleSubmit = (e) => {
@@ -124,7 +129,7 @@ export default function Dalle() {
     const data = await response.json();
 
     console.log("postNewData data: ", data);
-    // TODO: use the data to update the thumbnails
+    // TODO: use the new data to update the thumbnails
   };
 
   const loadDataFromMongo = async () => {
@@ -190,7 +195,6 @@ export default function Dalle() {
 
         <div className="flex flex-wrap mt-5 gap-2">
           {results &&
-            results.length &&
             results.map((result) => (
               <ResultCard
                 key={result._id}

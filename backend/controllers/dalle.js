@@ -60,8 +60,6 @@ const deleteImage = async (req, res) => {
 
   try {
     const dbResponse = await imageDocInDB.findByIdAndRemove(req.body._id);
-
-    // TODO: delete from cloudinary!
     const response = await cloudinary.uploader.destroy(dbResponse.cloudinaryId);
     console.log("+ cloudinary deletion: ", response.result);
 
