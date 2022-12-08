@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import "./header.scss";
 
 export default function Header({ user, updateUser }) {
+  const navigate = useNavigate();
   const handleLogout = () => {
     if (import.meta.env.VITE_VERBOSE === "true")
       console.log("handleLogout, auth = ", auth);
@@ -23,6 +24,7 @@ export default function Header({ user, updateUser }) {
         };
 
         updateUser(newUserData);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);

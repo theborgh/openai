@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -8,6 +8,7 @@ import {
 import { auth } from "../../../firebaseConfig";
 
 export default function SignUp({ updateUser }) {
+  const navigate = useNavigate();
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -15,7 +16,7 @@ export default function SignUp({ updateUser }) {
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        // const token = credential.accessToken;
 
         const newUserData = {
           idToken: credential.idToken,
@@ -29,6 +30,7 @@ export default function SignUp({ updateUser }) {
           console.log("+ user data: ", newUserData);
 
         updateUser(newUserData);
+        navigate("/dashboard");
       })
       .catch((error) => {
         // Handle Errors here.
@@ -80,6 +82,7 @@ export default function SignUp({ updateUser }) {
             console.log("+ user: ", newUserData);
 
           updateUser(newUserData);
+          navigate("/dashboard");
         });
       })
       .catch((error) => {

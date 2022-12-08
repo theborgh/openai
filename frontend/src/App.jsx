@@ -9,6 +9,7 @@ import Davinci from "./pages/Davinci/Davinci";
 import "./index.scss";
 import SignUp from "./pages/Register/Register";
 import LogIn from "./pages/LogIn/LogIn";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   const [user, setUser] = useState({
@@ -41,6 +42,7 @@ function App() {
               path="/login"
               element={<LogIn updateUser={handleUpdateUser} />}
             />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </div>
         <Footer />

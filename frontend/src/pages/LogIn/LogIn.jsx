@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -8,6 +8,7 @@ import {
 import { auth } from "../../../firebaseConfig";
 
 export default function LogIn({ updateUser }) {
+  const navigate = useNavigate();
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -27,6 +28,7 @@ export default function LogIn({ updateUser }) {
             console.log("+ signInWithPopup + data: ", data);
 
           updateUser(data);
+          navigate("/dashboard");
         });
       })
       .catch((error) => {
@@ -73,6 +75,7 @@ export default function LogIn({ updateUser }) {
             console.log("+ data: ", newUserData);
 
           updateUser(newUserData);
+          navigate("/dashboard");
         });
       })
       .catch((error) => {
