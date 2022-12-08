@@ -40,8 +40,19 @@ export default function LogIn() {
       });
   };
 
-  const emailAndPWSignIn = ({ email, password, rememberme }) => {
-    signInWithEmailAndPassword(auth, email, password)
+  const emailAndPWSignIn = (e) => {
+    e.preventDefault();
+    const { email, password, rememberme } = e.target.elements;
+
+    const data = {
+      email: email.value,
+      password: password.value,
+      rememberme: rememberme.checked,
+    };
+
+    if (import.meta.env.VITE_VERBOSE === "true") console.log("+ data: ", data);
+
+    signInWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
@@ -50,7 +61,8 @@ export default function LogIn() {
           loginID: user.uid,
         };
 
-        console.log("login data: ", loginData);
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("login data: ", loginData);
 
         if (rememberme) {
           window.localStorage.setItem("uid", loginData.loginID);

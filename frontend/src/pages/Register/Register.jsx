@@ -51,28 +51,19 @@ export default function SignUp() {
       rememberme: rememberme.checked,
     };
 
-    console.log("auth: ", auth, data.email, data.password);
-
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        const signUpData = {
-          username,
-          email: user.email,
-          loginID: user.uid,
-        };
-        console.log(
-          "+ createUserWithEmailAndPassword: ",
-          signUpData,
-          typeof signUpData.loginID
-        );
 
-        if (rememberme) {
-          window.localStorage.setItem("uid", loginData.loginID);
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("+ user: ", user);
+
+        if (data.rememberme) {
+          window.localStorage.setItem("uid", user.accessToken);
           window.sessionStorage.removeItem("uid");
         } else {
-          window.sessionStorage.setItem("uid", loginData.loginID);
+          window.sessionStorage.setItem("uid", user.accessToken);
           window.localStorage.removeItem("uid");
         }
       })
