@@ -13,7 +13,16 @@ export default function Header({ isLoggedIn, updateUser }) {
       .then(() => {
         if (import.meta.env.VITE_VERBOSE === "true")
           console.log("user logged out");
-        updateUser(false, "");
+
+        const newUserData = {
+          idToken: "",
+          displayName: "",
+          email: "",
+          photoURL: "",
+          uid: "",
+        };
+
+        updateUser(newUserData);
       })
       .catch((error) => {
         console.log(error);

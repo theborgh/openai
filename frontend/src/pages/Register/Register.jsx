@@ -17,17 +17,19 @@ export default function SignUp({ updateUser }) {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
-        const user = result.user;
 
-        const userData = {
-          email: user.email,
-          name: user.displayName,
-          image: user.photoURL,
-          loginID: user.uid,
+        const newUserData = {
+          idToken: credential.idToken,
+          displayName: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+          uid: result.user.uid,
         };
 
-        console.log("+ user data: ", userData);
-        updateUser(true, user.id);
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("+ user data: ", newUserData);
+
+        updateUser(newUserData);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -68,7 +70,15 @@ export default function SignUp({ updateUser }) {
           window.localStorage.removeItem("uid");
         }
 
-        updateUser(true, user.id);
+        const newUserData = {
+          idToken: userCredential.user.getIdToken(),
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+        };
+
+        updateUser(newUserData);
       })
       .catch((error) => {
         const errorCode = error.code;

@@ -12,18 +12,21 @@ import LogIn from "./pages/LogIn/LogIn";
 
 function App() {
   const [user, setUser] = useState({
-    isLogged: false,
+    idToken: "",
+    displayName: "",
+    email: "",
+    photoURL: "",
     uid: "",
   });
 
-  const handleUpdateUser = (isLogged, uid) => {
-    setUser({ isLogged, uid });
+  const handleUpdateUser = (updatedUserData) => {
+    setUser({ ...user, ...updatedUserData });
   };
 
   return (
     <Router>
       <div id="container">
-        <Header isLoggedIn={user.isLogged} updateUser={handleUpdateUser} />
+        <Header isLoggedIn={Boolean(user.uid)} updateUser={handleUpdateUser} />
         <div id="body">
           <Routes>
             <Route path="/" element={<Homepage />} />

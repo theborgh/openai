@@ -13,31 +13,24 @@ export default function LogIn({ updateUser }) {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-
-        const userData = {
-          email: user.email,
-          name: user.displayName,
-          image: user.photoURL,
-          loginID: user.uid,
+        // GoogleAuthProvider.credentialFromResult(result).accessToken // access token
+        const data = {
+          idToken: result.user.getIdToken(),
+          displayName: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+          uid: result.user.uid,
         };
 
-        console.log("+ user data: ", userData);
-        updateUser(true, user.uid);
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("+ signInWithPopup + data: ", data);
+
+        updateUser(data);
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error, error.message);
+        console.log(error, credential);
       });
   };
 
@@ -63,7 +56,7 @@ export default function LogIn({ updateUser }) {
         };
 
         if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("logged in user data: ", user);
+          console.log("logged in user data: ", userCredential);
 
         if (rememberme) {
           window.localStorage.setItem("uid", loginData.loginID);
@@ -73,12 +66,20 @@ export default function LogIn({ updateUser }) {
           window.localStorage.removeItem("uid");
         }
 
-        updateUser(true, user.uid);
+        const newUserData = {
+          idToken: userCredential.user.getIdToken(),
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+        };
+
+        updateUser(newUserData);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("Sign in Error: ", errorCode);
+        console.log("Sign in Error: ", errorCode, errorMessage);
       });
   };
 
