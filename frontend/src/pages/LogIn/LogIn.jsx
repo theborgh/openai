@@ -1,7 +1,41 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../../../firebaseConfig";
 
 export default function LogIn() {
+  const googleSignIn = () => {
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+
+        const userData = {
+          email: user.email,
+          name: user.displayName,
+          image: user.photoURL,
+          loginID: user.uid,
+        };
+
+        console.log("+ user data: ", userData);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(error, error.message);
+      });
+  };
+
   return (
     <div>
       <h1 className="text-center text-color-primary mt-4">User login</h1>
@@ -10,7 +44,7 @@ export default function LogIn() {
         <div className="signup-form-container py-20 p-16 flex flex-col items-center	 justify-center sm:w-full ">
           <button
             className="social-signup  mt-6 text-center social-button"
-            // onClick={googleSignIn}
+            onClick={googleSignIn}
           >
             Login with Google
           </button>
