@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 
-export default function SignUp() {
+export default function SignUp({ updateUser }) {
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -27,6 +27,7 @@ export default function SignUp() {
         };
 
         console.log("+ user data: ", userData);
+        updateUser(true, user.id);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -66,6 +67,8 @@ export default function SignUp() {
           window.sessionStorage.setItem("uid", user.accessToken);
           window.localStorage.removeItem("uid");
         }
+
+        updateUser(true, user.id);
       })
       .catch((error) => {
         const errorCode = error.code;

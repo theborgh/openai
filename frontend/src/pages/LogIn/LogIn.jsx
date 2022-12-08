@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 
-export default function LogIn() {
+export default function LogIn({ updateUser }) {
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -27,6 +27,7 @@ export default function LogIn() {
         };
 
         console.log("+ user data: ", userData);
+        updateUser(true, user.uid);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -62,7 +63,7 @@ export default function LogIn() {
         };
 
         if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("login data: ", loginData);
+          console.log("logged in user data: ", user);
 
         if (rememberme) {
           window.localStorage.setItem("uid", loginData.loginID);
@@ -71,6 +72,8 @@ export default function LogIn() {
           window.sessionStorage.setItem("uid", loginData.loginID);
           window.localStorage.removeItem("uid");
         }
+
+        updateUser(true, user.uid);
       })
       .catch((error) => {
         const errorCode = error.code;
