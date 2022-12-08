@@ -50,13 +50,10 @@ export default function Header({ user, updateUser }) {
               <span onClick={handleLogout} className="hover:cursor-pointer">
                 Log out
               </span>
-              <div>
-                {user.photoURL ? (
-                  <img src={user.photoURL} className="w-6" />
-                ) : (
-                  "U"
-                )}
-              </div>
+              <img
+                src={user.photoURL || "../../../assets/anonymous.png"}
+                className="w-6 bg-slate-400"
+              />
             </div>
           ) : (
             <Link to={"/login"}>Login</Link>

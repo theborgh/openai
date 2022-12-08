@@ -16,7 +16,6 @@ export default function SignUp({ updateUser }) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        // The signed-in user info.
 
         const newUserData = {
           idToken: credential.idToken,
@@ -57,28 +56,31 @@ export default function SignUp({ updateUser }) {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
 
-        if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("+ user: ", user);
+        userCredential.user.getIdToken().then((idToken) => {
+          const user = userCredential.user;
 
-        if (data.rememberme) {
-          window.localStorage.setItem("uid", user.accessToken);
-          window.sessionStorage.removeItem("uid");
-        } else {
-          window.sessionStorage.setItem("uid", user.accessToken);
-          window.localStorage.removeItem("uid");
-        }
+          if (data.rememberme) {
+            window.localStorage.setItem("uid", user.accessToken);
+            window.sessionStorage.removeItem("uid");
+          } else {
+            window.sessionStorage.setItem("uid", user.accessToken);
+            window.localStorage.removeItem("uid");
+          }
 
-        const newUserData = {
-          idToken: userCredential.user.getIdToken(),
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          uid: user.uid,
-        };
+          const newUserData = {
+            idToken,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid,
+          };
 
-        updateUser(newUserData);
+          if (import.meta.env.VITE_VERBOSE === "true")
+            console.log("+ user: ", newUserData);
+
+          updateUser(newUserData);
+        });
       })
       .catch((error) => {
         const errorCode = error.code;

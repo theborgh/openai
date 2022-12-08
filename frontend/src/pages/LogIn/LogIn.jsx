@@ -13,19 +13,21 @@ export default function LogIn({ updateUser }) {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        // GoogleAuthProvider.credentialFromResult(result).accessToken // access token
-        const data = {
-          idToken: result.user.getIdToken(),
-          displayName: result.user.displayName,
-          email: result.user.email,
-          photoURL: result.user.photoURL,
-          uid: result.user.uid,
-        };
+        result.user.getIdToken().then((idToken) => {
+          // GoogleAuthProvider.credentialFromResult(result).accessToken // access token
+          const data = {
+            idToken,
+            displayName: result.user.displayName,
+            email: result.user.email,
+            photoURL: result.user.photoURL,
+            uid: result.user.uid,
+          };
 
-        if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("+ signInWithPopup + data: ", data);
+          if (import.meta.env.VITE_VERBOSE === "true")
+            console.log("+ signInWithPopup + data: ", data);
 
-        updateUser(data);
+          updateUser(data);
+        });
       })
       .catch((error) => {
         // The AuthCredential type that was used.
@@ -41,35 +43,37 @@ export default function LogIn({ updateUser }) {
     signInWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        const loginData = {
-          email: user.email,
-          loginID: user.uid,
-        };
+        userCredential.user.getIdToken().then((idToken) => {
+          const user = userCredential.user;
+          const loginData = {
+            email: user.email,
+            loginID: user.uid,
+          };
 
-        if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("logged in user data: ", userCredential);
+          if (import.meta.env.VITE_VERBOSE === "true")
+            console.log("logged in user data: ", userCredential);
 
-        if (rememberme) {
-          window.localStorage.setItem("uid", loginData.loginID);
-          window.sessionStorage.removeItem("uid");
-        } else {
-          window.sessionStorage.setItem("uid", loginData.loginID);
-          window.localStorage.removeItem("uid");
-        }
+          if (rememberme) {
+            window.localStorage.setItem("uid", loginData.loginID);
+            window.sessionStorage.removeItem("uid");
+          } else {
+            window.sessionStorage.setItem("uid", loginData.loginID);
+            window.localStorage.removeItem("uid");
+          }
 
-        const newUserData = {
-          idToken: userCredential.user.getIdToken(),
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          uid: user.uid,
-        };
+          const newUserData = {
+            idToken,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid,
+          };
 
-        if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("+ data: ", newUserData);
+          if (import.meta.env.VITE_VERBOSE === "true")
+            console.log("+ data: ", newUserData);
 
-        updateUser(newUserData);
+          updateUser(newUserData);
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
