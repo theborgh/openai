@@ -4,7 +4,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import "./header.scss";
 
-export default function Header({ isLoggedIn, updateUser }) {
+export default function Header({ user, updateUser }) {
   const handleLogout = () => {
     if (import.meta.env.VITE_VERBOSE === "true")
       console.log("handleLogout, auth = ", auth);
@@ -45,10 +45,19 @@ export default function Header({ isLoggedIn, updateUser }) {
           <Link to={"/about"}>About</Link>
         </div>
         <div className="navbarLink text-color-secondary">
-          {isLoggedIn ? (
-            <span onClick={handleLogout} className="hover:cursor-pointer">
-              Log out
-            </span>
+          {user.idToken ? (
+            <div className="flex gap-2">
+              <span onClick={handleLogout} className="hover:cursor-pointer">
+                Log out
+              </span>
+              <div>
+                {user.photoURL ? (
+                  <img src={user.photoURL} className="w-6" />
+                ) : (
+                  "U"
+                )}
+              </div>
+            </div>
           ) : (
             <Link to={"/login"}>Login</Link>
           )}

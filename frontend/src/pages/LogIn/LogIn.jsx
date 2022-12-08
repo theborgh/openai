@@ -38,14 +38,6 @@ export default function LogIn({ updateUser }) {
     e.preventDefault();
     const { email, password, rememberme } = e.target.elements;
 
-    const data = {
-      email: email.value,
-      password: password.value,
-      rememberme: rememberme.checked,
-    };
-
-    if (import.meta.env.VITE_VERBOSE === "true") console.log("+ data: ", data);
-
     signInWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {
         // Signed in
@@ -73,6 +65,9 @@ export default function LogIn({ updateUser }) {
           photoURL: user.photoURL,
           uid: user.uid,
         };
+
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("+ data: ", newUserData);
 
         updateUser(newUserData);
       })

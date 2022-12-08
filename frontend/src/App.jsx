@@ -26,7 +26,7 @@ function App() {
   return (
     <Router>
       <div id="container">
-        <Header isLoggedIn={Boolean(user.uid)} updateUser={handleUpdateUser} />
+        <Header user={user} updateUser={handleUpdateUser} />
         <div id="body">
           <Routes>
             <Route path="/" element={<Homepage />} />
