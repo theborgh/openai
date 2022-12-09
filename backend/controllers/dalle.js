@@ -1,6 +1,5 @@
 require("dotenv").config({ path: `${__dirname}/../.env` });
 const cloudinary = require("../cloudinaryConfig");
-const { rawListeners } = require("../models/dalle/images");
 const imageDocInDB = require("../models/dalle/images");
 
 const getImages = async (req, res) => {
@@ -110,7 +109,35 @@ const generateImages = async (req, res) => {
       console.log("openAIData: ", openAIData);
     }
 
-    res.status(200).json(openAIData);
+    // Upload all the newly generated images to cloudinary
+    if (openAIData.length !== 0) {
+      const promises = openAIData.map((image) => {
+        return cloudinary.uploader.upload(image.url, {
+          folder: "dalle",
+        });
+      });
+
+      const data = await Promise.all(promises);
+      const response = data.map((item) => item.url);
+
+      // send url and description to mongo
+      const dbData = response.map((item, i) => ({
+        cloudinaryId: data[i].public_id,
+        url: item,
+        description: openAIData[i].description,
+      }));
+
+      const dbResponse = await storeNewImagesInDB(dbData);
+      const r = data.map((item, i) => ({
+        url: item.url,
+        description: openAIData[i].description,
+        _id: dbResponse[i]._id,
+      }));
+
+      res.status(200).json(r);
+    } else {
+      res.status(400).json("Some error occurred, request payload is invalid");
+    }
   }
 };
 

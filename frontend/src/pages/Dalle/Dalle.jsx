@@ -44,7 +44,7 @@ export default function Dalle({ user }) {
         results.map((el) => `${el.url}#${el.description}`).join(";")
       );
       // testing: post data in state to BE (mongo + cloudinary) at EVERY state update!
-      postNewDataToBE(results);
+
       console.log("results is: ", results);
     }
   }, [results]);
@@ -115,32 +115,7 @@ export default function Dalle({ user }) {
       if (import.meta.env.VITE_DEBUGGING === "true") {
         localStorage.setItem("urls", results.join("#"));
       }
-
-      postNewDataToBE(newData);
     }
-  };
-
-  const isCloudinaryUrl = (s) => s.includes("cloudinary");
-
-  // Post openAI URLs and descriptions to the BE so they can be stored on Cloudinary/MongoDB
-  const postNewDataToBE = async (newData) => {
-    const response = await fetch("http://localhost:3000/dalle/process", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      mode: "cors",
-      body: JSON.stringify(newData),
-    });
-
-    const data = await response.json();
-
-    if (import.meta.env.VITE_VERBOSE === "true") {
-      console.log("postNewData data: ", data);
-    }
-
-    // Use the new data to update the thumbnails.
-    setResults([...data, ...results.filter((el) => isCloudinaryUrl(el.url))]);
   };
 
   const loadDataFromMongo = async () => {
