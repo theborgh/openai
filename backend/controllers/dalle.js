@@ -5,6 +5,8 @@ const imageDocInDB = require("../models/dalle/images");
 const getImages = async (req, res) => {
   console.log("getImages");
 
+  if (process.env.VERBOSE === "true") console.log("req.body: ", req);
+
   try {
     const response = await imageDocInDB
       .find({ username: req.query.username })

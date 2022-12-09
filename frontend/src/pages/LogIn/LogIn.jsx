@@ -46,7 +46,9 @@ export default function LogIn({ updateUser }) {
           });
 
           updateUser(data);
-          navigate("/dashboard");
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 100);
         });
       })
       .catch((error) => {
@@ -110,7 +112,9 @@ export default function LogIn({ updateUser }) {
           });
 
           updateUser(newUserData);
-          navigate("/dashboard");
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 100);
         });
       })
       .catch((error) => {

@@ -13,7 +13,7 @@ export default function Dalle({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuthorization(navigate);
+    // checkAuthorization(navigate);
 
     async function fetchData() {
       const res = await loadDataFromMongo();
@@ -126,6 +126,7 @@ export default function Dalle({ user }) {
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
         },
         method: "GET",
         mode: "cors",

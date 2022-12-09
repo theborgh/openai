@@ -54,10 +54,6 @@ const getJWT = (req, res) => {
 const verifyToken = (req, res) => {
   console.log("+ verifyToken");
 
-  if (process.env.VERBOSE) {
-    console.log("req.body = ", req.body);
-  }
-
   try {
     jwt.verify(req.body.token, process.env.JWT_SECRET);
     res.status(200).json("verified");

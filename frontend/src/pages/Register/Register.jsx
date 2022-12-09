@@ -48,7 +48,9 @@ export default function SignUp({ updateUser }) {
         });
 
         updateUser(newUserData);
-        navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -117,7 +119,9 @@ export default function SignUp({ updateUser }) {
           });
 
           updateUser(newUserData);
-          navigate("/dashboard");
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 100);
         });
       })
       .catch((error) => {
