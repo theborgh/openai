@@ -5,10 +5,16 @@ import models from "../../modelData";
 export default function Homepage() {
   return (
     <div>
-      <h1>Homepage</h1>
+      <h1 className="text-center mt-4">
+        <span className="text-color-secondary">AI</span>
+        <span className="text-color-disabled">Demo</span>
+      </h1>
 
       <div>
-        <p>Which model would you like to try?</p>
+        <p>
+          Test the capabilities of the today's most advanced artificial
+          intelligence algorithms in a simple and user-friendly way
+        </p>
         <div className="flex p-4 place-content-center gap-4">
           {models.map((model) => (
             <ModelCard

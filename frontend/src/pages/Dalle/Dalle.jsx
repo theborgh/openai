@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import ResultCard from "../../components/ResultCard/ResultCard";
+import { useNavigate } from "react-router-dom";
+import ResultCard from "../../components/ImageCard/ImageCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import "./Dalle.scss";
 
-export default function Dalle() {
+export default function Dalle({ user }) {
   const [prompt, setPrompt] = useState("");
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user.uid) navigate("/login");
+
     async function fetchData() {
       const res = await loadDataFromMongo();
       setResults(res.reverse());

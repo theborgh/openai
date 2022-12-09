@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Davinci({ user }) {
+export default function UserSettings({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,9 +10,8 @@ export default function Davinci({ user }) {
 
   return (
     <div>
-      <h1 className="text-center text-color-primary font-serif mt-4">
-        Davinci
-      </h1>
+      {" "}
+      <h1 className="text-center text-color-primary mt-4">User settings</h1>
     </div>
   );
 }

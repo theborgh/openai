@@ -10,6 +10,7 @@ import "./index.scss";
 import SignUp from "./pages/Register/Register";
 import LogIn from "./pages/LogIn/LogIn";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import UserSettings from "./pages/UserSettings/UserSettings";
 
 function App() {
   const [user, setUser] = useState({
@@ -32,8 +33,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/about" element={<About />} />
-            <Route path="/dalle" element={<Dalle />} />
-            <Route path="/davinci" element={<Davinci />} />
+            <Route path="/dalle" element={<Dalle user={user} />} />
+            <Route path="/davinci" element={<Davinci user={user} />} />
             <Route
               path="/register"
               element={<SignUp updateUser={handleUpdateUser} />}
@@ -42,7 +43,8 @@ function App() {
               path="/login"
               element={<LogIn updateUser={handleUpdateUser} />}
             />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard user={user} />} />
+            <Route path="/settings" element={<UserSettings user={user} />} />
           </Routes>
         </div>
         <Footer />

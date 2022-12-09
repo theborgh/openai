@@ -1,7 +1,7 @@
 import React from "react";
 import { faTrashCan, faFileArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./ResultCard.scss";
+import "./ImageCard.scss";
 
 export default function ResultCard({ resultUrl, description, handleDelete }) {
   const generateCloudinaryThumbnailUrl = (url) => {

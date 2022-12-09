@@ -43,6 +43,11 @@ export default function Header({ user, updateUser }) {
         </Link>
       </div>
       <div id="links" className="flex justify-end space-x-2">
+        {user.uid && (
+          <div className="navbarLink text-color-disabled hover:text-color-secondary">
+            <Link to={"/dashboard"}>Dashboard</Link>
+          </div>
+        )}
         <div className="navbarLink text-color-disabled hover:text-color-secondary">
           <Link to={"/about"}>About</Link>
         </div>
