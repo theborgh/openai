@@ -1,18 +1,20 @@
 require("dotenv").config({ path: `${__dirname}/../.env` });
-const mongoose = require("mongoose");
 const userDoc = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 // create new user in mongo
 const createNewUser = async (req, res) => {
   console.log("+ createNewUser");
 
   if (process.env.VERBOSE) {
-    console.log("req.body = ", req.body);
+    console.log("req.query = ", req.query);
   }
 
   try {
+    // TODO: only create if there is no other user with same username!
+
     const newUser = await userDoc.create({
-      username: req.body.username,
+      username: req.query.username,
       openaiApiKey: "",
       freeApiRequests: 10,
     });
@@ -21,9 +23,11 @@ const createNewUser = async (req, res) => {
       console.log("newUser = ", newUser);
     }
 
-    // TODO: take user id, add to jwt token, send token back
-
-    res.status(200).json(getJWT());
+    res.status(200).json(
+      jwt.sign({ username: req.query.username }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      })
+    );
   } catch (e) {
     res.status(500).json(e);
   }

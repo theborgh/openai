@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
@@ -8,6 +8,7 @@ import {
 import { auth } from "../../../firebaseConfig";
 
 export default function SignUp({ updateUser }) {
+  const [formUsername, setFormUsername] = useState("");
   const navigate = useNavigate();
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
@@ -72,7 +73,7 @@ export default function SignUp({ updateUser }) {
 
           const newUserData = {
             idToken,
-            displayName: user.displayName,
+            displayName: formUsername,
             email: user.email,
             photoURL: user.photoURL,
             uid: user.uid,
@@ -80,6 +81,23 @@ export default function SignUp({ updateUser }) {
 
           if (import.meta.env.VITE_VERBOSE === "true")
             console.log("+ user: ", newUserData);
+
+          // get JWT token and store in session storage
+          fetch(
+            `http://localhost:3000/auth/createuser?username=${formUsername}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              method: "GET",
+            }
+          ).then((response) => {
+            response.json().then((jwt) => {
+              if (import.meta.env.VITE_VERBOSE === "true")
+                console.log("+ jwt: ", jwt);
+              window.sessionStorage.setItem("jwt", jwt);
+            });
+          });
 
           updateUser(newUserData);
           navigate("/dashboard");
@@ -109,11 +127,13 @@ export default function SignUp({ updateUser }) {
           <form onSubmit={emailAndPWSignUp} className="mt-3">
             <div className="form-item">
               <input
+                onChange={(e) => setFormUsername(e.target.value)}
                 className="form-control block px-3 py-1.5 text-base font-normal text-color-disabled bg-white bg-clip-padding border border-solid border-color-primary rounded m-0 focus:text-color-primary focus:bg-white focus:border-color-primary focus:outline-none mb-1"
                 type="text"
                 id="username"
                 name="username"
                 placeholder="Username"
+                value={formUsername}
               />
             </div>
             <div className="form-item">

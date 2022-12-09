@@ -9,6 +9,7 @@ import { auth } from "../../../firebaseConfig";
 
 export default function LogIn({ updateUser }) {
   const navigate = useNavigate();
+
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
