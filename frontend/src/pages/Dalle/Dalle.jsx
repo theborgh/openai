@@ -4,6 +4,7 @@ import ResultCard from "../../components/ImageCard/ImageCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import "./Dalle.scss";
+import { checkAuthorization } from "../../helpers";
 
 export default function Dalle({ user }) {
   const [prompt, setPrompt] = useState("");
@@ -12,7 +13,7 @@ export default function Dalle({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.uid) navigate("/login");
+    checkAuthorization(navigate);
 
     async function fetchData() {
       const res = await loadDataFromMongo();

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { checkAuthorization } from "../../helpers";
 
 export default function Davinci({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.uid) navigate("/login");
+    checkAuthorization(navigate);
   }, []);
 
   return (

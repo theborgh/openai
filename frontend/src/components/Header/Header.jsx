@@ -23,6 +23,8 @@ export default function Header({ user, updateUser }) {
           uid: "",
         };
 
+        sessionStorage.removeItem("jwt");
+
         updateUser(newUserData);
         navigate("/");
       })

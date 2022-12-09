@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { checkAuthorization } from "../../helpers";
 
 export default function Dashboard({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.uid) navigate("/login");
+    checkAuthorization(navigate);
   }, []);
 
   return (

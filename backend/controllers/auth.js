@@ -51,4 +51,19 @@ const getJWT = (req, res) => {
   }
 };
 
-module.exports = { createNewUser, getJWT };
+const verifyToken = (req, res) => {
+  console.log("+ verifyToken");
+
+  if (process.env.VERBOSE) {
+    console.log("req.body = ", req.body);
+  }
+
+  try {
+    jwt.verify(req.body.token, process.env.JWT_SECRET);
+    res.status(200).json("verified");
+  } catch (e) {
+    res.status(403).json(e);
+  }
+};
+
+module.exports = { createNewUser, getJWT, verifyToken };
