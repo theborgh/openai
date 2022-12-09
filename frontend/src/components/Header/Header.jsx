@@ -61,6 +61,7 @@ export default function Header({ user, updateUser }) {
               <img
                 src={user.photoURL || "../../../assets/anonymous.png"}
                 className="w-6 bg-slate-400"
+                referrerPolicy="no-referrer"
               />
             </div>
           ) : (

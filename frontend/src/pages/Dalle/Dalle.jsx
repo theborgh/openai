@@ -81,6 +81,7 @@ export default function Dalle({ user }) {
       prompt,
       n: 1,
       size: "1024x1024",
+      username: user.displayName,
     };
 
     const requestOptions = {
@@ -119,13 +120,16 @@ export default function Dalle({ user }) {
   };
 
   const loadDataFromMongo = async () => {
-    const response = await fetch("http://localhost:3000/dalle/images", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-      mode: "cors",
-    });
+    const response = await fetch(
+      `http://localhost:3000/dalle/images?username=${user.displayName}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+        mode: "cors",
+      }
+    );
 
     const data = await response.json();
 

@@ -6,7 +6,9 @@ const getImages = async (req, res) => {
   console.log("getImages");
 
   try {
-    const response = await imageDocInDB.find({}).select("url description");
+    const response = await imageDocInDB
+      .find({ username: req.query.username })
+      .select("url description");
     // console.log("getimages response: ", response);
     res.status(200).json(response);
   } catch (e) {
@@ -17,6 +19,8 @@ const getImages = async (req, res) => {
 
 const processNewImages = async (req, res) => {
   console.log("== processNewImages ==");
+
+  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
 
   // Upload all the newly generated images to cloudinary
   if (req.body && req.body.length !== 0) {
@@ -88,7 +92,11 @@ const generateImages = async (req, res) => {
       "Content-Type": "application/json",
       Authorization: "Bearer " + String(process.env.OPENAI_API_KEY),
     },
-    body: JSON.stringify(req.body),
+    body: JSON.stringify({
+      prompt: req.body.prompt,
+      n: req.body.n,
+      size: req.body.size,
+    }),
   };
 
   const response = await fetch(
@@ -123,6 +131,7 @@ const generateImages = async (req, res) => {
 
       // send url and description to mongo
       const dbData = response.map((item, i) => ({
+        username: req.body.username,
         cloudinaryId: data[i].public_id,
         url: item,
         description: openAIData[i].description,
