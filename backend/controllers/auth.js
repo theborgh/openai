@@ -33,11 +33,22 @@ const createNewUser = async (req, res) => {
   }
 };
 
-// create new user in mongo
-const getJWT = () => {
+const getJWT = (req, res) => {
   console.log("+ getJWT");
 
-  return "sampleToken";
+  if (process.env.VERBOSE) {
+    console.log("req.query = ", req.query);
+  }
+
+  try {
+    res.status(200).json(
+      jwt.sign({ username: req.query.username }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      })
+    );
+  } catch (e) {
+    res.status(500).json(e);
+  }
 };
 
-module.exports = { createNewUser };
+module.exports = { createNewUser, getJWT };

@@ -28,6 +28,23 @@ export default function LogIn({ updateUser }) {
           if (import.meta.env.VITE_VERBOSE === "true")
             console.log("+ signInWithPopup + data: ", data);
 
+          // get JWT token and store in session storage
+          fetch(
+            `http://localhost:3000/auth/getJWT?username=${data.displayName}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              method: "GET",
+            }
+          ).then((response) => {
+            response.json().then((jwt) => {
+              if (import.meta.env.VITE_VERBOSE === "true")
+                console.log("+ jwt: ", jwt);
+              window.sessionStorage.setItem("jwt", jwt);
+            });
+          });
+
           updateUser(data);
           navigate("/dashboard");
         });
@@ -74,6 +91,23 @@ export default function LogIn({ updateUser }) {
 
           if (import.meta.env.VITE_VERBOSE === "true")
             console.log("+ data: ", newUserData);
+
+          // get JWT token and store in session storage
+          fetch(
+            `http://localhost:3000/auth/getJWT?username=${newUserData.displayName}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              method: "GET",
+            }
+          ).then((response) => {
+            response.json().then((jwt) => {
+              if (import.meta.env.VITE_VERBOSE === "true")
+                console.log("+ jwt: ", jwt);
+              window.sessionStorage.setItem("jwt", jwt);
+            });
+          });
 
           updateUser(newUserData);
           navigate("/dashboard");
