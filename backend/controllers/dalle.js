@@ -31,6 +31,7 @@ const processNewImages = async (req, res) => {
 
     // send url and description to mongo
     const dbData = response.map((item, i) => ({
+      username: req.body.username,
       cloudinaryId: data[i].public_id,
       url: item,
       description: req.body[i].description,

@@ -53,10 +53,11 @@ export default function Header({ user, updateUser }) {
         </div>
         <div className="navbarLink text-color-secondary">
           {user.idToken ? (
-            <div className="flex gap-2">
-              <span onClick={handleLogout} className="hover:cursor-pointer">
-                Log out
-              </span>
+            <div
+              onClick={handleLogout}
+              className="flex gap-2 hover:cursor-pointer"
+            >
+              <span>Log out</span>
               <img
                 src={user.photoURL || "../../../assets/anonymous.png"}
                 className="w-6 bg-slate-400"

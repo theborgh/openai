@@ -26,5 +26,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/dalle/", require("./routes/dalle"));
+app.use("/auth/", require("./routes/auth"));
 
 app.listen(PORT, console.log(`listening on PORT: ${PORT}`));
