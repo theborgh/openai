@@ -87,7 +87,7 @@ export default function Dalle({ user }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + String(import.meta.env.VITE_OPENAI_API_KEY),
+        //Authorization: "Bearer " + "", // TODO: replace with jtw token from session storage
       },
       body: JSON.stringify(params),
     };
@@ -95,7 +95,7 @@ export default function Dalle({ user }) {
     setIsLoading(true);
 
     const response = await fetch(
-      "https://api.openai.com/v1/images/generations",
+      "http://localhost:3000/dalle/generateimages",
       requestOptions
     );
 
@@ -104,12 +104,7 @@ export default function Dalle({ user }) {
     if (!response.ok) {
       console.error("An error occurred with the fetch: ", response.status);
     } else {
-      const data = await response.json();
-      const newData = Array.from(data.data, (item) => ({
-        url: item.url,
-        description: prompt,
-        _id: "",
-      }));
+      const newData = await response.json();
 
       if (import.meta.env.VITE_VERBOSE === "true") {
         console.log("newData: ", newData);

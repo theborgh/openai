@@ -1,4 +1,6 @@
+require("dotenv").config({ path: `${__dirname}/../.env` });
 const cloudinary = require("../cloudinaryConfig");
+const { rawListeners } = require("../models/dalle/images");
 const imageDocInDB = require("../models/dalle/images");
 
 const getImages = async (req, res) => {
@@ -77,4 +79,39 @@ const deleteImage = async (req, res) => {
   }
 };
 
-module.exports = { processNewImages, getImages, deleteImage };
+const generateImages = async (req, res) => {
+  console.log("= generate images =");
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + String(process.env.OPENAI_API_KEY),
+    },
+    body: JSON.stringify(req.body),
+  };
+
+  const response = await fetch(
+    "https://api.openai.com/v1/images/generations",
+    requestOptions
+  );
+
+  if (!response.ok) {
+    res.status(500).json("- An error has occurred: ", response);
+  } else {
+    const data = await response.json();
+    const openAIData = Array.from(data.data, (item) => ({
+      url: item.url,
+      description: req.body.prompt,
+      _id: "",
+    }));
+
+    if (process.env.VERBOSE === "true") {
+      console.log("openAIData: ", openAIData);
+    }
+
+    res.status(200).json(openAIData);
+  }
+};
+
+module.exports = { processNewImages, getImages, deleteImage, generateImages };
