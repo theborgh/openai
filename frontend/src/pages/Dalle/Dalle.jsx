@@ -21,20 +21,6 @@ export default function Dalle({ user }) {
     }
 
     fetchData();
-
-    if (import.meta.env.VITE_DEBUGGING === "true") {
-      // load saved URLs from localstorage into state
-      const urls = window.localStorage.getItem("urls");
-      if (urls) {
-        const storedObjects = urls.split(";");
-        setResults(
-          Array.from(storedObjects, (el) => ({
-            url: el.split("#")[0],
-            description: el.split("#")[1],
-          }))
-        );
-      }
-    }
   }, []);
 
   useEffect(() => {

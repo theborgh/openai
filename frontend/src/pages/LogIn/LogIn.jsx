@@ -18,11 +18,8 @@ export default function LogIn({ updateUser }) {
         result.user.getIdToken().then((idToken) => {
           // GoogleAuthProvider.credentialFromResult(result).accessToken // access token
           const data = {
-            idToken,
             displayName: result.user.displayName,
-            email: result.user.email,
             photoURL: result.user.photoURL,
-            uid: result.user.uid,
           };
 
           if (import.meta.env.VITE_VERBOSE === "true")
@@ -84,11 +81,9 @@ export default function LogIn({ updateUser }) {
           }
 
           const newUserData = {
-            idToken,
             displayName: user.displayName,
-            email: user.email,
+
             photoURL: user.photoURL,
-            uid: user.uid,
           };
 
           if (import.meta.env.VITE_VERBOSE === "true")

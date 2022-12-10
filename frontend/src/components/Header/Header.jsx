@@ -16,11 +16,8 @@ export default function Header({ user, updateUser }) {
           console.log("user logged out");
 
         const newUserData = {
-          idToken: "",
           displayName: "",
-          email: "",
           photoURL: "",
-          uid: "",
         };
 
         sessionStorage.removeItem("jwt");
@@ -51,10 +48,13 @@ export default function Header({ user, updateUser }) {
           </div>
         )}
         <div className="navbarLink text-color-disabled hover:text-color-secondary">
+          <Link to={"/dashboard"}>Dashboard</Link>
+        </div>
+        <div className="navbarLink text-color-disabled hover:text-color-secondary">
           <Link to={"/about"}>About</Link>
         </div>
         <div className="navbarLink text-color-secondary">
-          {user.idToken ? (
+          {user.displayName ? (
             <div
               onClick={handleLogout}
               className="flex gap-2 hover:cursor-pointer"

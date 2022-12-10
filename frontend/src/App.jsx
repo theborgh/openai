@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -11,13 +11,16 @@ import SignUp from "./pages/Register/Register";
 import LogIn from "./pages/LogIn/LogIn";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import UserSettings from "./pages/UserSettings/UserSettings";
+import jwt_decode from "jwt-decode";
 
-function App() {
+const App = () => {
   const [user, setUser] = useState({
-    idToken: "",
-    displayName: "",
-    email: "",
+    displayName:
+      sessionStorage.getItem("jwt") &&
+      jwt_decode(sessionStorage.getItem("jwt")).username,
     photoURL: "",
+    email: "",
+    idToken: "",
     uid: "",
   });
 
@@ -51,6 +54,6 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
 export default App;

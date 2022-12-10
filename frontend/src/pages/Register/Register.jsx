@@ -20,11 +20,8 @@ export default function SignUp({ updateUser }) {
         // const token = credential.accessToken;
 
         const newUserData = {
-          idToken: credential.idToken,
           displayName: result.user.displayName,
-          email: result.user.email,
           photoURL: result.user.photoURL,
-          uid: result.user.uid,
         };
 
         if (import.meta.env.VITE_VERBOSE === "true")
@@ -91,11 +88,8 @@ export default function SignUp({ updateUser }) {
           }
 
           const newUserData = {
-            idToken,
             displayName: formUsername,
-            email: user.email,
             photoURL: user.photoURL,
-            uid: user.uid,
           };
 
           if (import.meta.env.VITE_VERBOSE === "true")
