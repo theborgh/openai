@@ -53,7 +53,7 @@ export default function LogIn({ updateUser }) {
               body: JSON.stringify({
                 email: result.user.email,
                 username: result.user.displayName,
-                imageURL: result.user.photoURL,
+                photoURL: result.user.photoURL,
               }),
             });
           });
