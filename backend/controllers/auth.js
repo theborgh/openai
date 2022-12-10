@@ -15,6 +15,7 @@ const createNewUser = async (req, res) => {
 
     const newUser = await userDoc.create({
       username: req.query.username,
+      photoURL: "",
       openaiApiKey: "",
       freeApiRequests: 10,
     });
@@ -24,9 +25,13 @@ const createNewUser = async (req, res) => {
     }
 
     res.status(200).json(
-      jwt.sign({ username: req.query.username }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      })
+      jwt.sign(
+        { username: req.query.username, photoURL: req.query.photoURL },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        }
+      )
     );
   } catch (e) {
     res.status(500).json(e);

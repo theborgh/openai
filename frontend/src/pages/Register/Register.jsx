@@ -6,10 +6,13 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
+import AlertMessage from "../../components/AlertMessage/AlertMessage";
 
 export default function SignUp({ updateUser }) {
   const [formUsername, setFormUsername] = useState("");
   const navigate = useNavigate();
+  const [alert, setAlert] = useState({ type: "", msgBold: "", msgBody: "" });
+
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -79,14 +82,6 @@ export default function SignUp({ updateUser }) {
         userCredential.user.getIdToken().then((idToken) => {
           const user = userCredential.user;
 
-          if (data.rememberme) {
-            window.localStorage.setItem("uid", user.accessToken);
-            window.sessionStorage.removeItem("uid");
-          } else {
-            window.sessionStorage.setItem("uid", user.accessToken);
-            window.localStorage.removeItem("uid");
-          }
-
           const newUserData = {
             displayName: formUsername,
             photoURL: user.photoURL,
@@ -122,7 +117,17 @@ export default function SignUp({ updateUser }) {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log("Sign in Error: ", errorCode, errorMessage);
+
+        setAlert({
+          type: "error",
+          msgBold: "Signup error",
+          msgBody: errorMessage,
+        });
       });
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ type: "", msgBold: "", msgBody: "" });
   };
 
   return (
@@ -136,7 +141,7 @@ export default function SignUp({ updateUser }) {
             onClick={googleSignIn}
           >
             <img src="../../../assets/googlelogo.png" width="20px" />
-            <span className="text-sm">Sign in with Google</span>
+            <span className="text-sm">Register with Google</span>
           </button>
           <div className="mt-3">or register below</div>
           <form onSubmit={emailAndPWSignUp} className="mt-3">
@@ -191,6 +196,9 @@ export default function SignUp({ updateUser }) {
               {/* <p className="text-right mt-2">forgot password?</p> */}
             </div>
           </form>
+          {alert.type && (
+            <AlertMessage alert={alert} handleClose={handleCloseAlert} />
+          )}
           <div className="mt-4 text-sm">
             Already registered?{" "}
             <Link

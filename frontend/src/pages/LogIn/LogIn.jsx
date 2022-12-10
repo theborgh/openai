@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
@@ -6,9 +6,11 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
+import AlertMessage from "../../components/AlertMessage/AlertMessage";
 
 export default function LogIn({ updateUser }) {
   const navigate = useNavigate();
+  const [alert, setAlert] = useState({ type: "", msgBold: "", msgBody: "" });
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
@@ -64,25 +66,12 @@ export default function LogIn({ updateUser }) {
         // Signed in
         userCredential.user.getIdToken().then((idToken) => {
           const user = userCredential.user;
-          const loginData = {
-            email: user.email,
-            loginID: user.uid,
-          };
 
           if (import.meta.env.VITE_VERBOSE === "true")
             console.log("logged in user data: ", userCredential);
 
-          if (rememberme) {
-            window.localStorage.setItem("uid", loginData.loginID);
-            window.sessionStorage.removeItem("uid");
-          } else {
-            window.sessionStorage.setItem("uid", loginData.loginID);
-            window.localStorage.removeItem("uid");
-          }
-
           const newUserData = {
             displayName: user.displayName,
-
             photoURL: user.photoURL,
           };
 
@@ -116,7 +105,17 @@ export default function LogIn({ updateUser }) {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log("Sign in Error: ", errorCode, errorMessage);
+
+        setAlert({
+          type: "error",
+          msgBold: "Sign in error",
+          msgBody: errorMessage,
+        });
       });
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ type: "", msgBold: "", msgBody: "" });
   };
 
   return (
@@ -174,6 +173,9 @@ export default function LogIn({ updateUser }) {
               {/* <p className="text-right mt-2">forgot password?</p> */}
             </div>
           </form>
+          {alert.type && (
+            <AlertMessage alert={alert} handleClose={handleCloseAlert} />
+          )}
           <div className="mt-4 text-sm">
             Not registered?{" "}
             <Link

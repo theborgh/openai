@@ -6,6 +6,7 @@ const User = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  photoURL: String,
   openaiApiKey: String,
   freeApiRequests: Number,
 });
