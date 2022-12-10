@@ -18,7 +18,6 @@ export default function LogIn({ updateUser }) {
     signInWithPopup(auth, provider)
       .then((result) => {
         result.user.getIdToken().then((idToken) => {
-          // GoogleAuthProvider.credentialFromResult(result).accessToken // access token
           const data = {
             displayName: result.user.displayName,
             photoURL: result.user.photoURL,
@@ -41,6 +40,21 @@ export default function LogIn({ updateUser }) {
               if (import.meta.env.VITE_VERBOSE === "true")
                 console.log("+ jwt: ", jwt);
               window.sessionStorage.setItem("jwt", jwt);
+            });
+
+            // If user with this email is not already in mongodb, create it
+            fetch(`http://localhost:3000/auth/checkuser`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+              },
+              mode: "cors",
+              body: JSON.stringify({
+                email: result.user.email,
+                username: result.user.displayName,
+                imageURL: result.user.photoURL,
+              }),
             });
           });
 

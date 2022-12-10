@@ -45,6 +45,21 @@ export default function SignUp({ updateUser }) {
               console.log("+ jwt: ", jwt);
             window.sessionStorage.setItem("jwt", jwt);
           });
+
+          // If user with this email is not already in mongodb, create it
+          fetch(`http://localhost:3000/auth/checkuser`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+            },
+            mode: "cors",
+            body: JSON.stringify({
+              email: result.user.email,
+              username: result.user.displayName,
+              imageURL: result.user.photoURL,
+            }),
+          });
         });
 
         updateUser(newUserData);

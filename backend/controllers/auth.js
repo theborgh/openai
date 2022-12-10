@@ -46,6 +46,46 @@ const createNewUser = async (req, res) => {
   }
 };
 
+const checkCreateUser = async (req, res) => {
+  console.log("checkCreateUser");
+
+  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
+
+  try {
+    const sameEmailUser = await userDoc.findOne({
+      email: req.body.email,
+    });
+
+    console.log("+ sameEmailUser = ", sameEmailUser);
+
+    if (!sameEmailUser) {
+      try {
+        const newUser = await userDoc.create({
+          email: req.body.email,
+          username: req.body.username,
+          photoURL: req.body.photoURL,
+          openaiApiKey: "",
+          freeApiRequests: 10,
+        });
+
+        if (process.env.VERBOSE) {
+          console.log("newUser = ", newUser);
+        }
+
+        res.status(200).json("");
+      } catch (e) {
+        res.status(500).json(e);
+      }
+    } else {
+      res.status(201).json("User already exists");
+    }
+  } catch (e) {
+    res.status(500).json("Unexpected database error");
+  }
+
+  res.status(200);
+};
+
 const getJWT = (req, res) => {
   console.log("+ getJWT");
 
@@ -75,4 +115,4 @@ const verifyToken = (req, res) => {
   }
 };
 
-module.exports = { createNewUser, getJWT, verifyToken };
+module.exports = { createNewUser, getJWT, verifyToken, checkCreateUser };
