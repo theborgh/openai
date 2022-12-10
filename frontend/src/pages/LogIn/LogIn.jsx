@@ -26,6 +26,20 @@ export default function LogIn({ updateUser }) {
           if (import.meta.env.VITE_VERBOSE === "true")
             console.log("+ signInWithPopup + data: ", data);
 
+          // If user with this email is not already in mongodb, create it
+          fetch(`http://localhost:3000/auth/checkuser`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            mode: "cors",
+            body: JSON.stringify({
+              email: result.user.email,
+              username: result.user.displayName,
+              photoURL: result.user.photoURL,
+            }),
+          });
+
           // get JWT token and store in session storage
           fetch(
             `http://localhost:3000/auth/getJWT?email=${result.user.email}`,
@@ -40,21 +54,6 @@ export default function LogIn({ updateUser }) {
               if (import.meta.env.VITE_VERBOSE === "true")
                 console.log("+ jwt: ", jwt);
               window.sessionStorage.setItem("jwt", jwt);
-            });
-
-            // If user with this email is not already in mongodb, create it
-            fetch(`http://localhost:3000/auth/checkuser`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-              },
-              mode: "cors",
-              body: JSON.stringify({
-                email: result.user.email,
-                username: result.user.displayName,
-                photoURL: result.user.photoURL,
-              }),
             });
           });
 

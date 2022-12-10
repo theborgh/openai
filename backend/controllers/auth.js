@@ -86,7 +86,7 @@ const checkCreateUser = async (req, res) => {
   res.status(200);
 };
 
-const getJWT = (req, res) => {
+const getJWT = async (req, res) => {
   console.log("+ getJWT");
 
   if (process.env.VERBOSE) {
@@ -94,10 +94,22 @@ const getJWT = (req, res) => {
   }
 
   try {
+    const sameEmailUser = await userDoc.findOne({
+      email: req.query.email,
+    });
+
     res.status(200).json(
-      jwt.sign({ email: req.query.email }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      })
+      jwt.sign(
+        {
+          email: req.query.email,
+          displayName: sameEmailUser.username,
+          photoURL: sameEmailUser.photoURL,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        }
+      )
     );
   } catch (e) {
     res.status(500).json(e);

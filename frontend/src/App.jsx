@@ -17,11 +17,13 @@ const App = () => {
   const [user, setUser] = useState({
     displayName:
       sessionStorage.getItem("jwt") &&
-      jwt_decode(sessionStorage.getItem("jwt")).username,
+      jwt_decode(sessionStorage.getItem("jwt")).displayName,
     email:
       sessionStorage.getItem("jwt") &&
       jwt_decode(sessionStorage.getItem("jwt")).email,
-    photoURL: "",
+    photoURL:
+      sessionStorage.getItem("jwt") &&
+      jwt_decode(sessionStorage.getItem("jwt")).photoURL,
   });
 
   const handleUpdateUser = (updatedUserData) => {
