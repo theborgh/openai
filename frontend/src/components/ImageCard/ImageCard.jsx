@@ -14,6 +14,22 @@ export default function ResultCard({ resultUrl, description, handleDelete }) {
     return res;
   };
 
+  const download = (url, name) => {
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const blobURL = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobURL;
+        a.style = "display: none";
+
+        if (name && name.length) a.download = name;
+        document.body.appendChild(a);
+        a.click();
+      })
+      .catch(() => setError(true));
+  };
+
   return (
     <div className="cardContainer bg-slate-200 w-64">
       <a href={resultUrl} className="cardImage" target="_blank">
@@ -34,17 +50,16 @@ export default function ResultCard({ resultUrl, description, handleDelete }) {
           icon={faTrashCan}
         />
       </button>
-      <a
+      <button
         className="cardIcon absolute -translate-y-60 translate-x-4"
-        href={resultUrl}
-        // href="oisdjfi"
+        onClick={() => download(resultUrl, description)}
         download
       >
         <FontAwesomeIcon
           className="fa-lg text-color-primary"
           icon={faFileArrowDown}
         />
-      </a>
+      </button>
     </div>
   );
 }
