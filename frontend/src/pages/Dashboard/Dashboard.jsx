@@ -12,7 +12,7 @@ export default function Dashboard({ user }) {
     type: "warning",
     msgBold: "Action required:",
     msgBody:
-      "Add an openai api key in the user settings to start using DALL-E and Davinci",
+      "Add an openai api key in the user settings page to start using DALL-E and Davinci",
   };
 
   useEffect(() => {
