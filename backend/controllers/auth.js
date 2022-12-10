@@ -11,30 +11,44 @@ const createNewUser = async (req, res) => {
   }
 
   try {
-    // TODO: only create if there is no other user with same username!
-
-    const newUser = await userDoc.create({
+    const sameNameUser = await userDoc.findOne({
       username: req.query.username,
-      photoURL: "",
-      openaiApiKey: "",
-      freeApiRequests: 10,
     });
 
-    if (process.env.VERBOSE) {
-      console.log("newUser = ", newUser);
-    }
+    console.log("+ sameNameUser = ", sameNameUser);
 
-    res.status(200).json(
-      jwt.sign(
-        { username: req.query.username, photoURL: req.query.photoURL },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: process.env.JWT_EXPIRES_IN,
+    if (!sameNameUser) {
+      try {
+        const newUser = await userDoc.create({
+          username: req.query.username,
+          photoURL: "",
+          openaiApiKey: "",
+          freeApiRequests: 10,
+        });
+
+        if (process.env.VERBOSE) {
+          console.log("newUser = ", newUser);
         }
-      )
-    );
+
+        res.status(200).json(
+          jwt.sign(
+            { username: req.query.username, photoURL: req.query.photoURL },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: process.env.JWT_EXPIRES_IN,
+            }
+          )
+        );
+      } catch (e) {
+        res.status(500).json(e);
+      }
+    } else {
+      res
+        .status(500)
+        .json("Username already exists, please try a different one");
+    }
   } catch (e) {
-    res.status(500).json(e);
+    res.status(500).json("Unexpected database error");
   }
 };
 

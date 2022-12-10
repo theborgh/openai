@@ -100,17 +100,27 @@ export default function SignUp({ updateUser }) {
               method: "GET",
             }
           ).then((response) => {
-            response.json().then((jwt) => {
-              if (import.meta.env.VITE_VERBOSE === "true")
-                console.log("+ jwt: ", jwt);
-              window.sessionStorage.setItem("jwt", jwt);
-            });
-          });
+            if (response.status === 200) {
+              response.json().then((jwt) => {
+                if (import.meta.env.VITE_VERBOSE === "true")
+                  console.log("+ jwt: ", jwt);
+                window.sessionStorage.setItem("jwt", jwt);
+              });
 
-          updateUser(newUserData);
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 100);
+              updateUser(newUserData);
+              setTimeout(() => {
+                navigate("/dashboard");
+              }, 100);
+            } else {
+              response.json().then((errorMsg) => {
+                setAlert({
+                  type: "error",
+                  msgBold: "Error:",
+                  msgBody: errorMsg,
+                });
+              });
+            }
+          });
         });
       })
       .catch((error) => {
@@ -141,7 +151,7 @@ export default function SignUp({ updateUser }) {
             onClick={googleSignIn}
           >
             <img src="../../../assets/googlelogo.png" width="20px" />
-            <span className="text-sm">Register with Google</span>
+            <span className="text-sm">Sign in with Google</span>
           </button>
           <div className="mt-3">or register below</div>
           <form onSubmit={emailAndPWSignUp} className="mt-3">
