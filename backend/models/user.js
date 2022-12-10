@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 
 const User = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
   },
+  username: String,
   photoURL: String,
   openaiApiKey: String,
   freeApiRequests: Number,

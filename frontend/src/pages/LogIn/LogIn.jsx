@@ -29,7 +29,7 @@ export default function LogIn({ updateUser }) {
 
           // get JWT token and store in session storage
           fetch(
-            `http://localhost:3000/auth/getJWT?username=${data.displayName}`,
+            `http://localhost:3000/auth/getJWT?email=${result.user.email}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -79,15 +79,12 @@ export default function LogIn({ updateUser }) {
             console.log("+ data: ", newUserData);
 
           // get JWT token and store in session storage
-          fetch(
-            `http://localhost:3000/auth/getJWT?username=${newUserData.displayName}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              method: "GET",
-            }
-          ).then((response) => {
+          fetch(`http://localhost:3000/auth/getJWT?username=${user.email}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          }).then((response) => {
             response.json().then((jwt) => {
               if (import.meta.env.VITE_VERBOSE === "true")
                 console.log("+ jwt: ", jwt);

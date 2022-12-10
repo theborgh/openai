@@ -32,7 +32,7 @@ export default function SignUp({ updateUser }) {
 
         // get JWT token and store in session storage
         fetch(
-          `http://localhost:3000/auth/getJWT?username=${newUserData.displayName}`,
+          `http://localhost:3000/auth/getJWT?username=${result.user.email}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -76,12 +76,15 @@ export default function SignUp({ updateUser }) {
     };
 
     // try to create user in DB
-    fetch(`http://localhost:3000/auth/createuser?username=${formUsername}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    })
+    fetch(
+      `http://localhost:3000/auth/createuser?username=${formUsername}&uid=${data.email}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    )
       .then((response) => {
         if (response.status === 200) {
           // If response status is 200, create user in google
@@ -103,7 +106,7 @@ export default function SignUp({ updateUser }) {
 
                 // If all is good, get JWT token and store in session storage
                 fetch(
-                  `http://localhost:3000/auth/getJWT?username=${newUserData.displayName}`,
+                  `http://localhost:3000/auth/getJWT?username=${user.email}`,
                   {
                     headers: {
                       "Content-Type": "application/json",

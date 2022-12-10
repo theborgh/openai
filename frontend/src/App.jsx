@@ -18,10 +18,10 @@ const App = () => {
     displayName:
       sessionStorage.getItem("jwt") &&
       jwt_decode(sessionStorage.getItem("jwt")).username,
+    email:
+      sessionStorage.getItem("jwt") &&
+      jwt_decode(sessionStorage.getItem("jwt")).email,
     photoURL: "",
-    email: "",
-    idToken: "",
-    uid: "",
   });
 
   const handleUpdateUser = (updatedUserData) => {

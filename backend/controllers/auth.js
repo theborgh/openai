@@ -11,15 +11,16 @@ const createNewUser = async (req, res) => {
   }
 
   try {
-    const sameNameUser = await userDoc.findOne({
-      username: req.query.username,
+    const sameEmailUser = await userDoc.findOne({
+      email: req.query.email,
     });
 
-    console.log("+ sameNameUser = ", sameNameUser);
+    console.log("+ sameEmailUser = ", sameEmailUser);
 
-    if (!sameNameUser) {
+    if (!sameEmailUser) {
       try {
         const newUser = await userDoc.create({
+          email: req.query.email,
           username: req.query.username,
           photoURL: "",
           openaiApiKey: "",
@@ -54,7 +55,7 @@ const getJWT = (req, res) => {
 
   try {
     res.status(200).json(
-      jwt.sign({ username: req.query.username }, process.env.JWT_SECRET, {
+      jwt.sign({ email: req.query.email }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       })
     );

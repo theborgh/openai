@@ -5,12 +5,9 @@ const imageDocInDB = require("../models/dalle/images");
 const getImages = async (req, res) => {
   console.log("getImages");
 
-  if (process.env.VERBOSE === "true")
-    console.log(" req.authorization: ", req.headers.authorization);
-
   try {
     const response = await imageDocInDB
-      .find({ username: req.query.username })
+      .find({ uid: req.query.uid })
       .select("url description");
 
     res.status(200).json(response);
@@ -97,7 +94,7 @@ const generateImages = async (req, res) => {
 
       // send url and description to mongo
       const dbData = response.map((item, i) => ({
-        username: req.body.username,
+        uid: req.body.uid,
         cloudinaryId: data[i].public_id,
         url: item,
         description: openAIData[i].description,

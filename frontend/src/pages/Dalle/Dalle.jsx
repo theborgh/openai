@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import "./Dalle.scss";
 import { checkAuthorization } from "../../helpers";
+import jwt_decode from "jwt-decode";
 
 export default function Dalle({ user }) {
   const [prompt, setPrompt] = useState("");
@@ -69,7 +70,7 @@ export default function Dalle({ user }) {
       prompt,
       n: 1,
       size: "1024x1024",
-      username: user.displayName,
+      uid: user.email,
     };
 
     const requestOptions = {
@@ -109,7 +110,11 @@ export default function Dalle({ user }) {
 
   const loadDataFromMongo = async () => {
     const response = await fetch(
-      `http://localhost:3000/dalle/images?username=${user.displayName}`,
+      `http://localhost:3000/dalle/images?uid=${
+        user.email ||
+        (sessionStorage.getItem("jwt") &&
+          jwt_decode(sessionStorage.getItem("jwt")).email)
+      }`,
       {
         headers: {
           "Content-Type": "application/json",
