@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import "./ModelCard.scss";
 
 export default function ModelCard({
   modelName,
@@ -11,7 +10,10 @@ export default function ModelCard({
 }) {
   return (
     <div style={{ width: `${imageSize}px` }}>
-      <Link to={`/${modelPath}`} className="font-bold text-lg">
+      <Link
+        to={`/${modelPath}`}
+        className="font-bold text-lg text-color-primary"
+      >
         {modelName}
         <img src={imagePath} />
         <div className="description text-sm">{modelDescription}</div>

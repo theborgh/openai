@@ -104,6 +104,7 @@ const getJWT = async (req, res) => {
           email: req.query.email,
           displayName: sameEmailUser.username,
           photoURL: sameEmailUser.photoURL,
+          openaiApiKey: sameEmailUser.openaiApiKey,
         },
         process.env.JWT_SECRET,
         {

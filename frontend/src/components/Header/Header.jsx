@@ -19,6 +19,7 @@ export default function Header({ user, updateUser }) {
           displayName: "",
           email: "",
           photoURL: "",
+          openaiApiKey: "",
         };
 
         sessionStorage.removeItem("jwt");

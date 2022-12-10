@@ -1,13 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function AlertMessage({ alert, handleClose }) {
+  const [color, setColor] = useState("");
+
   useEffect(() => {
     if (import.meta.env.VITE_VERBOSE === "true") console.log("alert: ", alert);
+
+    switch (alert.type) {
+      case "error":
+        setColor("red");
+        break;
+      case "warning":
+        setColor("yellow");
+        break;
+      default:
+        setColor("green");
+    }
   }, []);
 
   return (
     <div
-      className="m-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex gap-2"
+      className={`m-3 bg-${color}-100 border border-${color}-400 text-${color}-700 px-4 py-3 rounded flex gap-2`}
       role="alert"
     >
       <strong className="font-bold">{alert.msgBold} </strong>

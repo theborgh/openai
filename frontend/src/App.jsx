@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -24,7 +24,9 @@ const App = () => {
     photoURL:
       sessionStorage.getItem("jwt") &&
       jwt_decode(sessionStorage.getItem("jwt")).photoURL,
-    openaiApiKey: "",
+    openaiApiKey:
+      sessionStorage.getItem("jwt") &&
+      jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
   });
 
   const handleUpdateUser = (updatedUserData) => {
