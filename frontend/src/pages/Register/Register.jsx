@@ -75,58 +75,71 @@ export default function SignUp({ updateUser }) {
       rememberme: rememberme.checked,
     };
 
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
-        // Signed in
+    // try to create user in DB
+    fetch(`http://localhost:3000/auth/createuser?username=${formUsername}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          // If response status is 200, create user in google
+          createUserWithEmailAndPassword(auth, data.email, data.password).then(
+            (userCredential) => {
+              // Signed in via Google
+              userCredential.user.getIdToken().then((idToken) => {
+                const user = userCredential.user;
 
-        userCredential.user.getIdToken().then((idToken) => {
-          const user = userCredential.user;
+                const newUserData = {
+                  displayName: formUsername,
+                  photoURL: user.photoURL,
+                };
 
-          const newUserData = {
-            displayName: formUsername,
-            photoURL: user.photoURL,
-          };
-
-          if (import.meta.env.VITE_VERBOSE === "true")
-            console.log("+ user: ", newUserData);
-
-          // get JWT token and store in session storage
-          fetch(
-            `http://localhost:3000/auth/createuser?username=${formUsername}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              method: "GET",
-            }
-          ).then((response) => {
-            if (response.status === 200) {
-              response.json().then((jwt) => {
                 if (import.meta.env.VITE_VERBOSE === "true")
-                  console.log("+ jwt: ", jwt);
-                window.sessionStorage.setItem("jwt", jwt);
-              });
+                  console.log("+ user: ", newUserData);
 
-              updateUser(newUserData);
-              setTimeout(() => {
-                navigate("/dashboard");
-              }, 100);
-            } else {
-              response.json().then((errorMsg) => {
-                setAlert({
-                  type: "error",
-                  msgBold: "Error:",
-                  msgBody: errorMsg,
+                updateUser(newUserData);
+
+                // If all is good, get JWT token and store in session storage
+                fetch(
+                  `http://localhost:3000/auth/getJWT?username=${newUserData.displayName}`,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    method: "GET",
+                  }
+                ).then((response) => {
+                  response.json().then((jwt) => {
+                    if (import.meta.env.VITE_VERBOSE === "true")
+                      console.log("+ jwt: ", jwt);
+                    window.sessionStorage.setItem("jwt", jwt);
+                  });
                 });
+
+                // Successful registration, navigate to dashboard
+                setTimeout(() => {
+                  navigate("/dashboard");
+                }, 100);
               });
             }
+          );
+        } else {
+          // response.status is not 200, probably because of duplicate username
+          response.json().then((errorMessage) => {
+            setAlert({
+              type: "error",
+              msgBold: "Signup error: ",
+              msgBody: errorMessage,
+            });
           });
-        });
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("Sign in Error: ", errorCode, errorMessage);
+        console.log("Signup Error: ", errorCode, errorMessage);
 
         setAlert({
           type: "error",

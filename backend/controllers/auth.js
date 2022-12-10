@@ -30,19 +30,12 @@ const createNewUser = async (req, res) => {
           console.log("newUser = ", newUser);
         }
 
-        res.status(200).json(
-          jwt.sign(
-            { username: req.query.username, photoURL: req.query.photoURL },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: process.env.JWT_EXPIRES_IN,
-            }
-          )
-        );
+        res.status(200).json("");
       } catch (e) {
         res.status(500).json(e);
       }
     } else {
+      console.log("About to return status 500");
       res
         .status(500)
         .json("Username already exists, please try a different one");
