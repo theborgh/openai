@@ -12,7 +12,7 @@ const createNewUser = async (req, res) => {
 
   try {
     const sameEmailUser = await userDoc.findOne({
-      email: req.query.email,
+      email: req.query.uid,
     });
 
     console.log("+ sameEmailUser = ", sameEmailUser);
@@ -20,7 +20,7 @@ const createNewUser = async (req, res) => {
     if (!sameEmailUser) {
       try {
         const newUser = await userDoc.create({
-          email: req.query.email,
+          email: req.query.uid,
           username: req.query.username,
           photoURL: "",
           openaiApiKey: "",

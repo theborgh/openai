@@ -49,6 +49,8 @@ const deleteImage = async (req, res) => {
 const generateImages = async (req, res) => {
   console.log("= generate images =");
 
+  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
+
   const requestOptions = {
     method: "POST",
     headers: {

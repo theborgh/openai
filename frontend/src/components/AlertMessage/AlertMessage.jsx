@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function AlertMessage({ alert, handleClose }) {
+  useEffect(() => {
+    if (import.meta.env.VITE_VERBOSE === "true") console.log("alert: ", alert);
+  }, []);
+
   return (
     <div
       className="m-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex gap-2"

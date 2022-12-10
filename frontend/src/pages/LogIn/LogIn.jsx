@@ -92,7 +92,7 @@ export default function LogIn({ updateUser }) {
             console.log("+ data: ", newUserData);
 
           // get JWT token and store in session storage
-          fetch(`http://localhost:3000/auth/getJWT?username=${user.email}`, {
+          fetch(`http://localhost:3000/auth/getJWT?email=${user.email}`, {
             headers: {
               "Content-Type": "application/json",
             },
