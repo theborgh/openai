@@ -3,7 +3,7 @@ export default [
     name: "DALL-E",
     description: "Create images from a text description in natural language",
     modelPath: "dalle",
-    imagePath: "/assets/dalle.jpg",
+    imagePath: "/assets/dalle.png",
   },
   {
     name: "Davinci",

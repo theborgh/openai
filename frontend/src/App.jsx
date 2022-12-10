@@ -24,6 +24,7 @@ const App = () => {
     photoURL:
       sessionStorage.getItem("jwt") &&
       jwt_decode(sessionStorage.getItem("jwt")).photoURL,
+    openaiApiKey: "",
   });
 
   const handleUpdateUser = (updatedUserData) => {
