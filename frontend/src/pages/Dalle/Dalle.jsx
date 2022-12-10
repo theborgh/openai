@@ -13,7 +13,7 @@ export default function Dalle({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // checkAuthorization(navigate);
+    checkAuthorization(navigate);
 
     async function fetchData() {
       const res = await loadDataFromMongo();
@@ -64,6 +64,7 @@ export default function Dalle({ user }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
       },
       mode: "cors",
       body: JSON.stringify(elementToDelete),
@@ -89,7 +90,7 @@ export default function Dalle({ user }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        //Authorization: "Bearer " + "", // TODO: replace with jtw token from session storage
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
       },
       body: JSON.stringify(params),
     };

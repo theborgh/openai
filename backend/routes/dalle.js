@@ -6,10 +6,10 @@ const {
   deleteImage,
   generateImages,
 } = require("../controllers/dalle");
+const { verifyJWTToken } = require("../middleware/authentication");
 
-router.get("/images", getImages);
-router.post("/process", processNewImages);
-router.post("/delete", deleteImage);
-router.post("/generateimages", generateImages);
+router.get("/images", verifyJWTToken, getImages);
+router.post("/delete", verifyJWTToken, deleteImage);
+router.post("/generateimages", verifyJWTToken, generateImages);
 
 module.exports = router;

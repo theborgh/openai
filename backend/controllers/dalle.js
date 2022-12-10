@@ -5,54 +5,18 @@ const imageDocInDB = require("../models/dalle/images");
 const getImages = async (req, res) => {
   console.log("getImages");
 
-  if (process.env.VERBOSE === "true") console.log("req.body: ", req);
+  if (process.env.VERBOSE === "true")
+    console.log(" req.authorization: ", req.headers.authorization);
 
   try {
     const response = await imageDocInDB
       .find({ username: req.query.username })
       .select("url description");
-    // console.log("getimages response: ", response);
+
     res.status(200).json(response);
   } catch (e) {
     res.status(500).json(e);
     console.log("error: ", e);
-  }
-};
-
-const processNewImages = async (req, res) => {
-  console.log("== processNewImages ==");
-
-  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
-
-  // Upload all the newly generated images to cloudinary
-  if (req.body && req.body.length !== 0) {
-    const promises = req.body.map((item, i) => {
-      return cloudinary.uploader.upload(req.body[i].url, {
-        folder: "dalle",
-      });
-    });
-
-    const data = await Promise.all(promises);
-    const response = data.map((item) => item.url);
-
-    // send url and description to mongo
-    const dbData = response.map((item, i) => ({
-      username: req.body.username,
-      cloudinaryId: data[i].public_id,
-      url: item,
-      description: req.body[i].description,
-    }));
-
-    const dbResponse = await storeNewImagesInDB(dbData);
-    const r = data.map((item, i) => ({
-      url: item.url,
-      description: req.body[i].description,
-      _id: dbResponse[i]._id,
-    }));
-
-    res.status(200).json(r);
-  } else {
-    res.status(400).json("Some error occurred, request payload is invalid");
   }
 };
 
@@ -153,4 +117,4 @@ const generateImages = async (req, res) => {
   }
 };
 
-module.exports = { processNewImages, getImages, deleteImage, generateImages };
+module.exports = { getImages, deleteImage, generateImages };
