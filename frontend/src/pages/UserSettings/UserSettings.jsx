@@ -8,8 +8,6 @@ export default function UserSettings({ user, updateKey }) {
 
   useEffect(() => {
     checkAuthorization(navigate);
-
-    console.log("key: ", key);
   }, []);
 
   const handleSubmit = async (e) => {

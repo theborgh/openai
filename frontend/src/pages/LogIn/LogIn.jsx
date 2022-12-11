@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import AlertMessage from "../../components/AlertMessage/AlertMessage";
+import jwt_decode from "jwt-decode";
 
 export default function LogIn({ updateUser }) {
   const navigate = useNavigate();
@@ -21,14 +22,6 @@ export default function LogIn({ updateUser }) {
     signInWithPopup(auth, provider)
       .then((result) => {
         result.user.getIdToken().then((idToken) => {
-          const data = {
-            displayName: result.user.displayName,
-            photoURL: result.user.photoURL,
-          };
-
-          if (import.meta.env.VITE_VERBOSE === "true")
-            console.log("+ signInWithPopup + data: ", data);
-
           // If user with this email is not already in mongodb, create it
           fetch(`http://localhost:3000/auth/checkuser`, {
             method: "POST",
@@ -57,10 +50,25 @@ export default function LogIn({ updateUser }) {
               if (import.meta.env.VITE_VERBOSE === "true")
                 console.log("+ jwt: ", jwt);
               window.sessionStorage.setItem("jwt", jwt);
+
+              const data = {
+                displayName: result.user.displayName,
+                photoURL: result.user.photoURL,
+                openaiApiKey:
+                  sessionStorage.getItem("jwt") &&
+                  jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
+                email:
+                  sessionStorage.getItem("jwt") &&
+                  jwt_decode(sessionStorage.getItem("jwt")).email,
+              };
+
+              if (import.meta.env.VITE_VERBOSE === "true")
+                console.log("+ signInWithPopup + data: ", data);
+
+              updateUser(data);
             });
           });
 
-          updateUser(data);
           setTimeout(() => {
             navigate("/dashboard");
           }, 200);
@@ -89,14 +97,6 @@ export default function LogIn({ updateUser }) {
           if (import.meta.env.VITE_VERBOSE === "true")
             console.log("logged in user data: ", userCredential);
 
-          const newUserData = {
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-          };
-
-          if (import.meta.env.VITE_VERBOSE === "true")
-            console.log("+ data: ", newUserData);
-
           // get JWT token and store in session storage
           fetch(`http://localhost:3000/auth/getJWT?email=${user.email}`, {
             headers: {
@@ -108,10 +108,25 @@ export default function LogIn({ updateUser }) {
               if (import.meta.env.VITE_VERBOSE === "true")
                 console.log("+ jwt: ", jwt);
               window.sessionStorage.setItem("jwt", jwt);
+
+              const data = {
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                openaiApiKey:
+                  sessionStorage.getItem("jwt") &&
+                  jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
+                email:
+                  sessionStorage.getItem("jwt") &&
+                  jwt_decode(sessionStorage.getItem("jwt")).email,
+              };
+
+              if (import.meta.env.VITE_VERBOSE === "true")
+                console.log("+ signInWithPopup + data: ", data);
+
+              updateUser(data);
             });
           });
 
-          updateUser(newUserData);
           setTimeout(() => {
             navigate("/dashboard");
           }, 200);

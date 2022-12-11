@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import AlertMessage from "../../components/AlertMessage/AlertMessage";
+import jwt_decode from "jwt-decode";
 
 export default function SignUp({ updateUser }) {
   const [formUsername, setFormUsername] = useState("");
@@ -25,14 +26,6 @@ export default function SignUp({ updateUser }) {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         // const token = credential.accessToken;
 
-        const newUserData = {
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-        };
-
-        if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("+ user data: ", newUserData);
-
         // get JWT token and store in session storage
         fetch(`http://localhost:3000/auth/getJWT?email=${result.user.email}`, {
           headers: {
@@ -44,6 +37,22 @@ export default function SignUp({ updateUser }) {
             if (import.meta.env.VITE_VERBOSE === "true")
               console.log("+ jwt: ", jwt);
             window.sessionStorage.setItem("jwt", jwt);
+
+            const data = {
+              displayName: result.user.displayName,
+              photoURL: result.user.photoURL,
+              openaiApiKey:
+                sessionStorage.getItem("jwt") &&
+                jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
+              email:
+                sessionStorage.getItem("jwt") &&
+                jwt_decode(sessionStorage.getItem("jwt")).email,
+            };
+
+            if (import.meta.env.VITE_VERBOSE === "true")
+              console.log("+ signInWithPopup + data: ", data);
+
+            updateUser(data);
           });
 
           // If user with this email is not already in mongodb, create it
@@ -62,7 +71,6 @@ export default function SignUp({ updateUser }) {
           });
         });
 
-        updateUser(newUserData);
         setTimeout(() => {
           navigate("/dashboard");
         }, 200);
@@ -133,6 +141,22 @@ export default function SignUp({ updateUser }) {
                     if (import.meta.env.VITE_VERBOSE === "true")
                       console.log("+ jwt: ", jwt);
                     window.sessionStorage.setItem("jwt", jwt);
+
+                    const data = {
+                      displayName: user.displayName,
+                      photoURL: user.photoURL,
+                      openaiApiKey:
+                        sessionStorage.getItem("jwt") &&
+                        jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
+                      email:
+                        sessionStorage.getItem("jwt") &&
+                        jwt_decode(sessionStorage.getItem("jwt")).email,
+                    };
+
+                    if (import.meta.env.VITE_VERBOSE === "true")
+                      console.log("+ signInWithPopup + data: ", data);
+
+                    updateUser(data);
                   });
                 });
 
