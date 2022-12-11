@@ -1,6 +1,7 @@
 require("dotenv").config({ path: `${__dirname}/../.env` });
 const cloudinary = require("../cloudinaryConfig");
 const imageDocInDB = require("../models/dalle/images");
+const userDocInDB = require("../models/user");
 
 const getImages = async (req, res) => {
   console.log("getImages");
@@ -51,11 +52,15 @@ const generateImages = async (req, res) => {
 
   if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
 
+  // get the api key of the user
+  const user = await userDocInDB.findOne({ email: req.body.uid });
+  console.log("apikey: ", user.openaiApiKey);
+
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + String(process.env.OPENAI_API_KEY),
+      Authorization: "Bearer " + user.openaiApiKey,
     },
     body: JSON.stringify({
       prompt: req.body.prompt,
@@ -70,7 +75,7 @@ const generateImages = async (req, res) => {
   );
 
   if (!response.ok) {
-    res.status(500).json("- An error has occurred: ", response);
+    res.status(500).json("An error has occurred: ", response);
   } else {
     const data = await response.json();
     const openAIData = Array.from(data.data, (item) => ({

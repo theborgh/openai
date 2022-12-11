@@ -13,72 +13,64 @@ export default function LogIn({ updateUser }) {
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ type: "", msgBold: "", msgBody: "" });
 
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
 
     // delete previous jwt if present
     sessionStorage.removeItem("jwt");
 
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        result.user.getIdToken().then((idToken) => {
-          // If user with this email is not already in mongodb, create it
-          fetch(`http://localhost:3000/auth/checkuser`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            mode: "cors",
-            body: JSON.stringify({
-              email: result.user.email,
-              username: result.user.displayName,
-              photoURL: result.user.photoURL,
-            }),
-          });
+    const googleResult = await signInWithPopup(auth, provider);
+    await googleResult.user.getIdToken();
 
-          // get JWT token and store in session storage
-          fetch(
-            `http://localhost:3000/auth/getJWT?email=${result.user.email}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              method: "GET",
-            }
-          ).then((response) => {
-            response.json().then((jwt) => {
-              if (import.meta.env.VITE_VERBOSE === "true")
-                console.log("+ jwt: ", jwt);
-              window.sessionStorage.setItem("jwt", jwt);
+    // If user with this email is not already in mongodb, create it
+    await fetch(`http://localhost:3000/auth/checkuser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify({
+        email: googleResult.user.email,
+        username: googleResult.user.displayName,
+        photoURL: googleResult.user.photoURL,
+      }),
+    });
 
-              const data = {
-                displayName: result.user.displayName,
-                photoURL: result.user.photoURL,
-                openaiApiKey:
-                  sessionStorage.getItem("jwt") &&
-                  jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
-                email:
-                  sessionStorage.getItem("jwt") &&
-                  jwt_decode(sessionStorage.getItem("jwt")).email,
-              };
+    // get JWT token and store in session storage
+    const jwtResponse = await fetch(
+      `http://localhost:3000/auth/getJWT?email=${googleResult.user.email}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    );
 
-              if (import.meta.env.VITE_VERBOSE === "true")
-                console.log("+ signInWithPopup + data: ", data);
+    const jwt = await jwtResponse.json();
 
-              updateUser(data);
-            });
-          });
+    if (import.meta.env.VITE_VERBOSE === "true") console.log("+ jwt: ", jwt);
+    window.sessionStorage.setItem("jwt", jwt);
 
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 200);
-        });
-      })
-      .catch((error) => {
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error, credential);
-      });
+    const data = {
+      displayName: googleResult.user.displayName,
+      photoURL: googleResult.user.photoURL,
+      openaiApiKey:
+        sessionStorage.getItem("jwt") &&
+        jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
+      email:
+        sessionStorage.getItem("jwt") &&
+        jwt_decode(sessionStorage.getItem("jwt")).email,
+    };
+
+    if (import.meta.env.VITE_VERBOSE === "true")
+      console.log("+ signInWithPopup + data: ", data);
+
+    updateUser(data);
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 200);
   };
 
   const emailAndPWSignIn = (e) => {
