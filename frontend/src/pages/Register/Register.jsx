@@ -14,77 +14,62 @@ export default function SignUp({ updateUser }) {
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ type: "", msgBold: "", msgBody: "" });
 
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
 
     // delete previous jwt if present
     sessionStorage.removeItem("jwt");
 
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
+    const googleResult = await signInWithPopup(auth, provider);
+    const googleResponse = await fetch(
+      `http://localhost:3000/auth/getJWT?email=${googleResult.user.email}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    );
 
-        // get JWT token and store in session storage
-        fetch(`http://localhost:3000/auth/getJWT?email=${result.user.email}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        }).then((response) => {
-          response.json().then((jwt) => {
-            if (import.meta.env.VITE_VERBOSE === "true")
-              console.log("+ jwt: ", jwt);
-            window.sessionStorage.setItem("jwt", jwt);
+    const jwt = await googleResponse.json();
 
-            const data = {
-              displayName: result.user.displayName,
-              photoURL: result.user.photoURL,
-              openaiApiKey:
-                sessionStorage.getItem("jwt") &&
-                jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
-              email:
-                sessionStorage.getItem("jwt") &&
-                jwt_decode(sessionStorage.getItem("jwt")).email,
-            };
+    if (import.meta.env.VITE_VERBOSE === "true") console.log("+ jwt: ", jwt);
+    window.sessionStorage.setItem("jwt", jwt);
 
-            if (import.meta.env.VITE_VERBOSE === "true")
-              console.log("+ signInWithPopup + data: ", data);
+    const data = {
+      displayName: googleResult.user.displayName,
+      photoURL: googleResult.user.photoURL,
+      openaiApiKey:
+        sessionStorage.getItem("jwt") &&
+        jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
+      email:
+        sessionStorage.getItem("jwt") &&
+        jwt_decode(sessionStorage.getItem("jwt")).email,
+    };
 
-            updateUser(data);
-          });
+    if (import.meta.env.VITE_VERBOSE === "true")
+      console.log("+ signInWithPopup + data: ", data);
 
-          // If user with this email is not already in mongodb, create it
-          fetch(`http://localhost:3000/auth/checkuser`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-            },
-            mode: "cors",
-            body: JSON.stringify({
-              email: result.user.email,
-              username: result.user.displayName,
-              photoURL: result.user.photoURL,
-            }),
-          });
-        });
+    updateUser(data);
 
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 200);
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error, error.message);
-      });
+    // If user with this email is not already in mongodb, create it
+    fetch(`http://localhost:3000/auth/checkuser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+      },
+      mode: "cors",
+      body: JSON.stringify({
+        email: googleResult.user.email,
+        username: googleResult.user.displayName,
+        photoURL: googleResult.user.photoURL,
+      }),
+    });
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 200);
   };
 
   const emailAndPWSignUp = (e) => {

@@ -39,7 +39,7 @@ const createNewUser = async (req, res) => {
       console.log("About to return status 500");
       res
         .status(500)
-        .json("Username already exists, please try a different one");
+        .json("Username or email already exists, please try a different one");
     }
   } catch (e) {
     res.status(500).json("Unexpected database error");
