@@ -33,6 +33,10 @@ const App = () => {
     setUser({ ...user, ...updatedUserData });
   };
 
+  const handleUpdateKey = (newKey) => {
+    setUser({ ...user, openaiApiKey: newKey });
+  };
+
   return (
     <Router>
       <div id="container">
@@ -52,7 +56,10 @@ const App = () => {
               element={<LogIn updateUser={handleUpdateUser} />}
             />
             <Route path="/dashboard" element={<Dashboard user={user} />} />
-            <Route path="/settings" element={<UserSettings user={user} />} />
+            <Route
+              path="/settings"
+              element={<UserSettings user={user} updateKey={handleUpdateKey} />}
+            />
           </Routes>
         </div>
         <Footer />

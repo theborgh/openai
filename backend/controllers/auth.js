@@ -128,7 +128,30 @@ const verifyToken = (req, res) => {
   }
 };
 
-const deleteUser = (req, res) => {};
+const deleteUser = (req, res) => {
+  console.log("+ deleteUser");
+
+  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
+};
+
+const updateKey = async (req, res) => {
+  console.log("+ updateKey");
+
+  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
+
+  try {
+    // look up user by email, update key to req.body.key
+    await userDoc.findOneAndUpdate(
+      { email: req.body.email },
+      { openaiApiKey: req.body.key },
+      { new: true }
+    );
+
+    res.status(200).json("ok");
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
 
 module.exports = {
   createNewUser,
@@ -136,4 +159,5 @@ module.exports = {
   verifyToken,
   checkCreateUser,
   deleteUser,
+  updateKey,
 };

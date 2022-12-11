@@ -2,13 +2,51 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkAuthorization } from "../../helpers";
 
-export default function UserSettings({ user }) {
+export default function UserSettings({ user, updateKey }) {
   const navigate = useNavigate();
-  const [prompt, setPrompt] = useState("");
+  const [key, setKey] = useState(user.openaiApiKey);
 
   useEffect(() => {
     checkAuthorization(navigate);
+
+    console.log("key: ", key);
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // PUT key, if successful then update user.openaiApiKey
+    const response = await fetch("http://localhost:3000/auth/updatekey", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
+      },
+      mode: "cors",
+      body: JSON.stringify({
+        key,
+        email: user.email,
+      }),
+    });
+
+    await response.json();
+
+    updateKey(key);
+
+    // get JWT token and store in session storage
+    fetch(`http://localhost:3000/auth/getJWT?email=${user.email}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    }).then((response) => {
+      response.json().then((jwt) => {
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("+ jwt: ", jwt);
+        window.sessionStorage.setItem("jwt", jwt);
+      });
+    });
+  };
 
   const handleDelete = () => {
     console.log("handleDelete");
@@ -18,7 +56,7 @@ export default function UserSettings({ user }) {
     <div>
       <h1 className="text-center text-color-primary mt-4">User settings</h1>
 
-      <h2 className="text-center text-color-primary text-xl font-bold mt-6">
+      <h2 className="text-center text-color-primary text-xl font-bold mt-6 mb-3">
         Set your OpenAI api key
       </h2>
       <p>
@@ -29,13 +67,16 @@ export default function UserSettings({ user }) {
         choose to pay for further credits. Check OpenAI for more information.
       </p>
 
-      <form className="flex flex-col place-content-center gap-2 mx-5 md:flex-row my-2">
+      <form
+        className="flex flex-col place-content-center gap-2 mx-5 md:flex-row my-2"
+        onSubmit={handleSubmit}
+      >
         <input
-          onChange={(e) => setPrompt(e.target.value)}
+          onChange={(e) => setKey(e.target.value)}
           type="text"
           id="description"
           className="w-full form-control block px-3 py-1.5 text-base font-normal text-color-disabled bg-white bg-clip-padding border border-solid border-color-primary rounded m-0 focus:text-color-primary focus:bg-white focus:border-color-primary focus:outline-none"
-          value={prompt}
+          value={key}
           placeholder="Your OpenAI api key"
         />
         <button

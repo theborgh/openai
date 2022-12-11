@@ -63,7 +63,7 @@ export default function LogIn({ updateUser }) {
           updateUser(data);
           setTimeout(() => {
             navigate("/dashboard");
-          }, 100);
+          }, 200);
         });
       })
       .catch((error) => {
@@ -114,7 +114,7 @@ export default function LogIn({ updateUser }) {
           updateUser(newUserData);
           setTimeout(() => {
             navigate("/dashboard");
-          }, 100);
+          }, 200);
         });
       })
       .catch((error) => {

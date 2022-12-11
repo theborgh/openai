@@ -65,7 +65,7 @@ export default function SignUp({ updateUser }) {
         updateUser(newUserData);
         setTimeout(() => {
           navigate("/dashboard");
-        }, 100);
+        }, 200);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -139,7 +139,7 @@ export default function SignUp({ updateUser }) {
                 // Successful registration, navigate to dashboard
                 setTimeout(() => {
                   navigate("/dashboard");
-                }, 100);
+                }, 200);
               });
             }
           );
