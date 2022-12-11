@@ -14,7 +14,7 @@ export default function AlertMessage({ alert, handleClose }) {
         setColor("yellow");
         break;
       default:
-        setColor("green");
+        setColor("emerald");
     }
   }, []);
 

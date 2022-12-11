@@ -128,4 +128,12 @@ const verifyToken = (req, res) => {
   }
 };
 
-module.exports = { createNewUser, getJWT, verifyToken, checkCreateUser };
+const deleteUser = (req, res) => {};
+
+module.exports = {
+  createNewUser,
+  getJWT,
+  verifyToken,
+  checkCreateUser,
+  deleteUser,
+};

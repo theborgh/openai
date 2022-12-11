@@ -15,6 +15,9 @@ export default function LogIn({ updateUser }) {
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
+    // delete previous jwt if present
+    sessionStorage.removeItem("jwt");
+
     signInWithPopup(auth, provider)
       .then((result) => {
         result.user.getIdToken().then((idToken) => {
@@ -73,6 +76,9 @@ export default function LogIn({ updateUser }) {
   const emailAndPWSignIn = (e) => {
     e.preventDefault();
     const { email, password, rememberme } = e.target.elements;
+
+    // delete previous jwt if present
+    sessionStorage.removeItem("jwt");
 
     signInWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {

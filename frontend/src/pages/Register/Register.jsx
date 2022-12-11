@@ -16,6 +16,9 @@ export default function SignUp({ updateUser }) {
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
+    // delete previous jwt if present
+    sessionStorage.removeItem("jwt");
+
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -79,6 +82,9 @@ export default function SignUp({ updateUser }) {
   const emailAndPWSignUp = (e) => {
     e.preventDefault();
     const { username, email, password, rememberme } = e.target.elements;
+
+    // delete previous jwt if present
+    sessionStorage.removeItem("jwt");
 
     const data = {
       username: username.value,
