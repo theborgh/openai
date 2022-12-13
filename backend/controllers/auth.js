@@ -121,7 +121,7 @@ const verifyToken = (req, res) => {
   console.log("+ verifyToken");
 
   try {
-    jwt.verify(req.body.token, process.env.JWT_SECRET);
+    jwt.verify(req.query.token, process.env.JWT_SECRET);
     res.status(200).json("verified");
   } catch (e) {
     res.status(403).json(e);

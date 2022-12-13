@@ -8,7 +8,7 @@ const {
 const { verifyJWTToken } = require("../middleware/authentication");
 
 router.get("/images", verifyJWTToken, getImages);
-router.post("/delete", verifyJWTToken, deleteImage);
+router.delete("/delete", verifyJWTToken, deleteImage);
 router.post("/generateimages", verifyJWTToken, generateImages);
 
 module.exports = router;

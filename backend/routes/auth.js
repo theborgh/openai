@@ -12,7 +12,7 @@ const { verifyJWTToken } = require("../middleware/authentication");
 
 router.post("/createuser", createNewUser);
 router.get("/getjwt", getJWT);
-router.post("/verifytoken", verifyToken);
+router.get("/verifytoken", verifyToken);
 router.post("/checkuser", checkCreateUser);
 router.delete("/deleteuser", deleteUser);
 router.put("/updatekey", verifyJWTToken, updateKey);

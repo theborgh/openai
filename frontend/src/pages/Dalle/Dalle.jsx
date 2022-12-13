@@ -48,7 +48,7 @@ export default function Dalle({ user }) {
 
     // delete image from DB (find by id)
     const response = await fetch("http://localhost:3000/dalle/delete", {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,

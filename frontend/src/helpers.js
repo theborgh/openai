@@ -1,13 +1,17 @@
 export const checkAuthorization = (navigate) => {
   const fetchToken = async () => {
-    const response = await fetch("http://localhost:3000/auth/verifytoken", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      body: JSON.stringify({ token: sessionStorage.getItem("jwt") }),
-    });
+    const response = await fetch(
+      `http://localhost:3000/auth/verifytoken?token=${sessionStorage.getItem(
+        "jwt"
+      )}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+      }
+    );
 
     if (import.meta.env.VITE_VERBOSE === "true")
       console.log("+ response: ", response.status, response.status === 200);
