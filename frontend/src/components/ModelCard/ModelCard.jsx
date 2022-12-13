@@ -9,7 +9,7 @@ export default function ModelCard({
   imageSize,
 }) {
   return (
-    <div style={{ width: `${imageSize}px` }}>
+    <div style={{ width: `${imageSize}px` }} className="hover:opacity-75">
       <Link
         to={`/${modelPath}`}
         className="font-bold text-lg text-color-primary"

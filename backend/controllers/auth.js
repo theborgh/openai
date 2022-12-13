@@ -7,12 +7,12 @@ const createNewUser = async (req, res) => {
   console.log("+ createNewUser");
 
   if (process.env.VERBOSE) {
-    console.log("req.query = ", req.query);
+    console.log("req.query = ", req.body);
   }
 
   try {
     const sameEmailUser = await userDoc.findOne({
-      email: req.query.uid,
+      email: req.body.uid,
     });
 
     console.log("+ sameEmailUser = ", sameEmailUser);
@@ -20,8 +20,8 @@ const createNewUser = async (req, res) => {
     if (!sameEmailUser) {
       try {
         const newUser = await userDoc.create({
-          email: req.query.uid,
-          username: req.query.username,
+          email: req.body.uid,
+          username: req.body.username,
           photoURL: "",
           openaiApiKey: "",
           freeApiRequests: 10,

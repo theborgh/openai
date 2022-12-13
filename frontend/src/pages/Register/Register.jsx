@@ -87,15 +87,13 @@ export default function SignUp({ updateUser }) {
     };
 
     // try to create user in DB
-    fetch(
-      `http://localhost:3000/auth/createuser?username=${formUsername}&uid=${data.email}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      }
-    )
+    fetch(`http://localhost:3000/auth/createuser`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ username: formUsername, uid: data.email }),
+    })
       .then((response) => {
         if (response.status === 200) {
           // If response status is 200, create user in google
