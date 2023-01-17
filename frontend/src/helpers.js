@@ -5,7 +5,7 @@ export const checkAuthorization = (navigate) => {
         "jwt"
       )}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -14,7 +14,7 @@ export const checkAuthorization = (navigate) => {
     );
 
     if (import.meta.env.VITE_VERBOSE === "true")
-      console.log("+ response: ", response.status, response.status === 200);
+      console.log("+ response status code: ", response.status);
 
     return response.status === 200;
   };
