@@ -58,7 +58,13 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard user={user} />} />
             <Route
               path="/settings"
-              element={<UserSettings user={user} updateKey={handleUpdateKey} />}
+              element={
+                <UserSettings
+                  user={user}
+                  updateKey={handleUpdateKey}
+                  updateUser={handleUpdateUser}
+                />
+              }
             />
           </Routes>
         </div>

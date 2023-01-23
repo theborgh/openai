@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkAuthorization } from "../../helpers";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebaseConfig";
 
-export default function UserSettings({ user, updateKey }) {
+export default function UserSettings({ user, updateKey, updateUser }) {
   const navigate = useNavigate();
   const [key, setKey] = useState(user.openaiApiKey);
 
@@ -63,6 +65,26 @@ export default function UserSettings({ user, updateKey }) {
     });
 
     // log out
+    signOut(auth)
+      .then(() => {
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("user logged out");
+
+        const newUserData = {
+          displayName: "",
+          email: "",
+          photoURL: "",
+          openaiApiKey: "",
+        };
+
+        sessionStorage.removeItem("jwt");
+
+        updateUser(newUserData);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
