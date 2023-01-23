@@ -48,6 +48,19 @@ export default function UserSettings({ user, updateKey }) {
 
   const handleDelete = () => {
     console.log("handleDelete");
+
+    // delete all user images
+    fetch(`http://localhost:3000/auth/deleteuser?email=${user.email}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+    }).then((response) => {
+      response.json().then((resp) => {
+        if (import.meta.env.VITE_VERBOSE === "true")
+          console.log("+ response: ", resp);
+      });
+    });
   };
 
   return (

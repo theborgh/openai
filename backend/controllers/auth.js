@@ -1,5 +1,7 @@
 require("dotenv").config({ path: `${__dirname}/../.env` });
 const userDoc = require("../models/user");
+const imagesDoc = require("../models/dalle/images");
+const cloudinary = require("../cloudinaryConfig");
 const jwt = require("jsonwebtoken");
 
 // create new user in mongo
@@ -128,10 +130,36 @@ const verifyToken = (req, res) => {
   }
 };
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
   console.log("+ deleteUser");
 
-  if (process.env.VERBOSE === "true") console.log("req.body: ", req.body);
+  if (process.env.VERBOSE === "true") console.log("req.query: ", req.query);
+
+  try {
+    // delete all images for user
+    const dbResponse = await imagesDoc.find({ uid: req.query.email }).exec();
+
+    if (process.env.VERBOSE === "true")
+      console.log("db response: ", dbResponse);
+
+    const result = await cloudinary.api.delete_resources(
+      dbResponse.map((el) => el.cloudinaryId)
+    );
+
+    if (process.env.VERBOSE === "true") console.log("result: ", result);
+
+    await imagesDoc
+      .deleteMany({ _id: { $in: dbResponse.map((el) => el._id) } })
+      .exec();
+
+    // delete user from db
+
+    // delete user from firebase
+
+    res.status(200).json("deleted");
+  } catch (e) {
+    res.status(500).json({ message: "error: " + e.message });
+  }
 };
 
 const updateKey = async (req, res) => {
