@@ -142,21 +142,23 @@ const deleteUser = async (req, res) => {
     if (process.env.VERBOSE === "true")
       console.log("db response: ", dbResponse);
 
-    const result = await cloudinary.api.delete_resources(
-      dbResponse.map((el) => el.cloudinaryId)
-    );
+    if (dbResponse.length) {
+      const result = await cloudinary.api.delete_resources(
+        dbResponse.map((el) => el.cloudinaryId)
+      );
 
-    if (process.env.VERBOSE === "true") console.log("result: ", result);
+      if (process.env.VERBOSE === "true") console.log("result: ", result);
 
-    await imagesDoc
-      .deleteMany({ _id: { $in: dbResponse.map((el) => el._id) } })
-      .exec();
+      await imagesDoc
+        .deleteMany({ _id: { $in: dbResponse.map((el) => el._id) } })
+        .exec();
+    }
 
     // delete user from db
+    const doc = await userDoc.deleteOne({ email: req.query.email }).exec();
+    if (process.env.VERBOSE === "true") console.log("user removed: ", doc);
 
-    // delete user from firebase
-
-    res.status(200).json("deleted");
+    res.status(200).json("deleted all user data from database");
   } catch (e) {
     res.status(500).json({ message: "error: " + e.message });
   }

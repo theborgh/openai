@@ -46,10 +46,10 @@ export default function UserSettings({ user, updateKey }) {
     });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log("handleDelete");
 
-    // delete all user images
+    // delete all user data
     fetch(`http://localhost:3000/auth/deleteuser?email=${user.email}`, {
       headers: {
         "Content-Type": "application/json",
@@ -61,6 +61,8 @@ export default function UserSettings({ user, updateKey }) {
           console.log("+ response: ", resp);
       });
     });
+
+    // log out
   };
 
   return (
