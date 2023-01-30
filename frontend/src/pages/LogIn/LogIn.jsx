@@ -102,8 +102,12 @@ export default function LogIn({ updateUser }) {
               window.sessionStorage.setItem("jwt", jwt);
 
               const data = {
-                displayName: user.displayName,
-                photoURL: user.photoURL,
+                displayName:
+                  sessionStorage.getItem("jwt") &&
+                  jwt_decode(sessionStorage.getItem("jwt")).displayName,
+                photoURL:
+                  sessionStorage.getItem("jwt") &&
+                  jwt_decode(sessionStorage.getItem("jwt")).photoURL,
                 openaiApiKey:
                   sessionStorage.getItem("jwt") &&
                   jwt_decode(sessionStorage.getItem("jwt")).openaiApiKey,
