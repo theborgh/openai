@@ -69,14 +69,12 @@ const generateImages = async (req, res) => {
     }),
   };
 
-  const response = await fetch(
-    "https://api.openai.com/v1/images/generations",
-    requestOptions
-  );
+  try {
+    const response = await fetch(
+      "https://api.openai.com/v1/images/generations",
+      requestOptions
+    );
 
-  if (!response.ok) {
-    res.status(500).json("An error has occurred: ", response);
-  } else {
     const data = await response.json();
     const openAIData = Array.from(data.data, (item) => ({
       url: item.url,
@@ -86,6 +84,7 @@ const generateImages = async (req, res) => {
 
     if (process.env.VERBOSE === "true") {
       console.log("openAIData: ", openAIData);
+      console.log("response ", response);
     }
 
     // Upload all the newly generated images to cloudinary
@@ -116,8 +115,10 @@ const generateImages = async (req, res) => {
 
       res.status(200).json(r);
     } else {
-      res.status(400).json("Some error occurred, request payload is invalid");
+      res.status(400).json("Some error occurred, no results returned");
     }
+  } catch (e) {
+    res.status(500).json({ message: "An error has occurred: " });
   }
 };
 
