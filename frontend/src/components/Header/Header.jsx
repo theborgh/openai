@@ -7,14 +7,8 @@ import "./header.scss";
 export default function Header({ user, updateUser }) {
   const navigate = useNavigate();
   const handleLogout = () => {
-    if (import.meta.env.VITE_VERBOSE === "true")
-      console.log("handleLogout, auth = ", auth);
-
     signOut(auth)
       .then(() => {
-        if (import.meta.env.VITE_VERBOSE === "true")
-          console.log("user logged out");
-
         const newUserData = {
           displayName: "",
           email: "",
@@ -38,6 +32,7 @@ export default function Header({ user, updateUser }) {
 
   return (
     <div
+      data-testid="Header"
       id="header"
       className="flex bg-color-primary p-2 place-content-between"
     >

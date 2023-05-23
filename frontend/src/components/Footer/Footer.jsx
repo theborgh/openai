@@ -4,6 +4,7 @@ export default function Footer() {
   return (
     <div
       id="footer"
+      data-testid="Footer"
       className="flex flex-wrap bg-color-primary place-content-center text-color-disabled"
     >
       AI Demo &lt;

@@ -31,17 +31,27 @@ export default function ResultCard({ resultUrl, description, handleDelete }) {
   };
 
   return (
-    <div className="cardContainer bg-slate-200 w-64">
-      <a href={resultUrl} className="cardImage" target="_blank">
+    <div data-testid="ImageCard" className="cardContainer bg-slate-200 w-64">
+      <a
+        href={resultUrl}
+        data-testid="cardImage"
+        className="cardImage"
+        target="_blank"
+      >
         <img
+          data-testid="cardImage-img"
           src={generateCloudinaryThumbnailUrl(resultUrl)}
           className="h-64 hover:border-2"
         />
       </a>
-      <div className="cardDescription -translate-y-44 w-60 text-sm text-color-primary">
+      <div
+        data-testid="cardDescription"
+        className="cardDescription -translate-y-44 w-60 text-sm text-color-primary"
+      >
         {description}
       </div>
       <button
+        data-testid="cardDelete"
         className="cardIcon absolute -translate-y-60 translate-x-56"
         onClick={() => handleDelete(resultUrl)}
       >
@@ -51,6 +61,7 @@ export default function ResultCard({ resultUrl, description, handleDelete }) {
         />
       </button>
       <button
+        data-testid="cardDownload"
         className="cardIcon absolute -translate-y-60 translate-x-4"
         onClick={() => download(resultUrl, description)}
         download
