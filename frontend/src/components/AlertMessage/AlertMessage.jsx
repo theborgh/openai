@@ -4,8 +4,6 @@ export default function AlertMessage({ alert, handleClose }) {
   const [color, setColor] = useState("");
 
   useEffect(() => {
-    if (import.meta.env.VITE_DEBUG === "true") console.log("alert: ", alert);
-
     switch (alert.type) {
       case "error":
         setColor("red");
@@ -20,6 +18,7 @@ export default function AlertMessage({ alert, handleClose }) {
 
   return (
     <div
+      data-testid="AlertMessage"
       className={`m-3 bg-${color}-100 border border-${color}-400 text-${color}-700 px-4 py-3 rounded flex gap-2 place-content-between`}
       role="alert"
     >
@@ -27,7 +26,7 @@ export default function AlertMessage({ alert, handleClose }) {
         <strong className="font-bold">{alert.msgBold} </strong>
         <span className="block sm:inline">{alert.msgBody}</span>
       </div>
-      <span onClick={handleClose}>
+      <span data-testid="CloseButton" onClick={handleClose}>
         <svg
           className={`fill-current h-6 w-6 text-${color}-500`}
           role="button"
