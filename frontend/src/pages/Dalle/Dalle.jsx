@@ -131,7 +131,7 @@ export default function Dalle({ user }) {
   };
 
   return (
-    <>
+    <div data-testid="Dalle">
       <h1 className="text-center text-color-primary font-serif mt-4">
         DALL&#x2022;E 2
       </h1>
@@ -193,6 +193,6 @@ export default function Dalle({ user }) {
             ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
